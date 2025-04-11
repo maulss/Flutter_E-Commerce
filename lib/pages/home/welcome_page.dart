@@ -8,8 +8,6 @@ import 'package:flutter_ecommerce/pages/like/like_page.dart';
 import 'package:flutter_ecommerce/pages/profile/profile_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
-
 class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({super.key});
 

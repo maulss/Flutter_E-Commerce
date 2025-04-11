@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/pages/auth/login_page.dart';
 import 'package:flutter_ecommerce/pages/auth/register_page.dart';
+import 'package:flutter_ecommerce/pages/category/category_page.dart';
 import 'package:flutter_ecommerce/pages/home/welcome_page.dart';
 import 'package:flutter_ecommerce/pages/profile/about_me_page.dart';
 import 'package:flutter_ecommerce/providers/token/token_provider.dart';
@@ -48,6 +49,12 @@ Raw<GoRouter> router(RouterRef ref) {
         name: RouteName.aboutMe,
         builder: (context, state) => const AboutMePage(),
       ),
+      GoRoute(
+          path: RouteName.category,
+          name: RouteName.category,
+          builder: (context, state) {
+            return CategoryPage();
+          }),
     ],
   );
 }
