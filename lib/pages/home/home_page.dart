@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/constant/color_constant.dart';
 import 'package:flutter_ecommerce/routers/route_name.dart';
+import 'package:flutter_ecommerce/widget/card_widget.dart';
 import 'package:flutter_ecommerce/widget/submenu_widget.dart';
 import 'package:gap/gap.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -220,69 +221,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                     itemCount: 6,
                     itemBuilder: (context, index) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          color: ColorConstant.white,
-                        ),
-                        child: Column(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(6),
-                              child: Image.network(
-                                'https://images.unsplash.com/photo-1546069901-ba9599a7e63c',
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: 85,
-                              ),
-                            ),
-                            const Gap(6),
-                            const Text(
-                              "\$8.00",
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: ColorConstant.darkPrimary,
-                              ),
-                            ),
-                            const Text(
-                              "Fresh Peach",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: ColorConstant.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Text(
-                              "2.0 lbs",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: ColorConstant.greyText,
-                              ),
-                            ),
-                            Divider(
-                              color: ColorConstant.greyText.withOpacity(0.5),
-                              thickness: 1,
-                            ),
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.shopping_cart_outlined,
-                                  color: ColorConstant.darkPrimary,
-                                ),
-                                Gap(10),
-                                Text(
-                                  "Add to cart",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: ColorConstant.black,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
+                      return CardWidget(
+                        imageUrl:
+                            "https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
+                        price: "\$8.00",
+                        title: "Peanuts",
+                        weight: "1kg",
+                        onTap: () {
+                          context.pushNamed(RouteName.productDetail);
+                        },
                       );
                     },
                   ),
