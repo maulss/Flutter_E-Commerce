@@ -102,7 +102,10 @@ class ProfilePage extends ConsumerWidget {
         ),
       ),
       error: (error, stackTrace) => Center(
-        child: Text(error.toString()),
+        child: Text(
+          error.toString(),
+          style: const TextStyle(color: Colors.red),
+        ),
       ),
     ));
   }

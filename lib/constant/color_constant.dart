@@ -10,6 +10,7 @@ class ColorConstant {
   static const Color border = Color(0xffEBEBEB);
   static const Color primary = Color(0xffAEDC81);
   static const Color darkPrimary = Color(0xff6CC51D);
+  static const Color darkGreen = Color.fromARGB(255, 46, 73, 0);
   static const Color lightPrimary = Color(0xffEBFFD7);
   static const Color error = Color(0xffFF0000);
 }
