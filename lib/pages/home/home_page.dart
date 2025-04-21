@@ -3,6 +3,7 @@ import 'package:flutter_ecommerce/constant/color_constant.dart';
 import 'package:flutter_ecommerce/providers/home/home_provider.dart';
 import 'package:flutter_ecommerce/routers/route_name.dart';
 import 'package:flutter_ecommerce/widget/card_widget.dart';
+import 'package:flutter_ecommerce/widget/error_load_data_widget.dart';
 import 'package:flutter_ecommerce/widget/submenu_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -153,11 +154,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                       );
                     },
                     error: (error, stackTrace) {
-                      return Center(
-                        child: Text(
-                          error.toString(),
-                          style: const TextStyle(color: Colors.red),
-                        ),
+                      return ErrorLoadDataWidget(
+                        text: error.toString(),
                       );
                     },
                     loading: () {
@@ -232,11 +230,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     );
                   },
                   error: (error, stackTrace) {
-                    return Center(
-                      child: Text(
-                        error.toString(),
-                        style: const TextStyle(color: Colors.red),
-                      ),
+                    return ErrorLoadDataWidget(
+                      text: error.toString(),
                     );
                   },
                   loading: () {
@@ -291,18 +286,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                               weight: (dataProduct?.products![index].stock ?? 0)
                                   .toString(),
                               onTap: () {
-                                context.pushNamed(RouteName.productDetail);
+                                context.pushNamed(RouteName.productDetail,
+                                    extra: dataProduct
+                                        ?.products![index].productId);
                               },
                             );
                           },
                         );
                       },
                       error: (error, stackTrace) {
-                        return Center(
-                          child: Text(
-                            error.toString(),
-                            style: const TextStyle(color: Colors.red),
-                          ),
+                        return ErrorLoadDataWidget(
+                          text: error.toString(),
                         );
                       },
                       loading: () {

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/constant/color_constant.dart';
 import 'package:flutter_ecommerce/providers/home/home_provider.dart';
 import 'package:flutter_ecommerce/routers/route_name.dart';
+import 'package:flutter_ecommerce/widget/error_load_data_widget.dart';
+import 'package:flutter_ecommerce/widget/loading_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -78,17 +80,12 @@ class CategoryPage extends ConsumerWidget {
             );
           },
           error: (error, stackTrace) {
-            return Center(
-              child: Text(
-                error.toString(),
-                style: const TextStyle(color: Colors.red),
-              ),
+            return ErrorLoadDataWidget(
+              text: error.toString(),
             );
           },
           loading: () {
-            return const CircularProgressIndicator(
-              color: ColorConstant.primary,
-            );
+            return const LoadingWidget();
           },
         ),
       ),

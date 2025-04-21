@@ -10,6 +10,7 @@ import 'package:flutter_ecommerce/providers/token/token_provider.dart';
 import 'package:flutter_ecommerce/routers/route_name.dart';
 import 'package:flutter_ecommerce/utils/message.dart';
 import 'package:flutter_ecommerce/widget/buttom_widget.dart';
+import 'package:flutter_ecommerce/widget/error_load_data_widget.dart';
 import 'package:flutter_ecommerce/widget/form_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -365,8 +366,8 @@ class _AboutMePageState extends ConsumerState<AboutMePage> {
             color: ColorConstant.primary,
           ),
         ),
-        error: (error, stackTrace) => Center(
-          child: Text(error.toString()),
+        error: (error, stackTrace) => ErrorLoadDataWidget(
+          text: error.toString(),
         ),
       ),
     );

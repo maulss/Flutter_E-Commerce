@@ -6,6 +6,8 @@ import 'package:flutter_ecommerce/providers/profile/profile_provider.dart';
 import 'package:flutter_ecommerce/providers/token/token_provider.dart';
 import 'package:flutter_ecommerce/routers/route_name.dart';
 import 'package:flutter_ecommerce/utils/message.dart';
+import 'package:flutter_ecommerce/widget/error_load_data_widget.dart';
+import 'package:flutter_ecommerce/widget/loading_widget.dart';
 
 import 'package:flutter_ecommerce/widget/menu_profile_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,94 +22,88 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userData = ref.watch(getUserProvider);
     return Scaffold(
-        body: userData.when(
-      data: (data) {
-        final dataUser = data.data;
-        return Center(
-          child: Column(
-            children: [
-              const Gap(33),
-              Container(
-                height: 117,
-                width: 117,
-                decoration: const BoxDecoration(
-                  color: ColorConstant.primary,
-                  shape: BoxShape.circle,
+      body: userData.when(
+        data: (data) {
+          final dataUser = data.data;
+          return Center(
+            child: Column(
+              children: [
+                const Gap(33),
+                Container(
+                  height: 117,
+                  width: 117,
+                  decoration: const BoxDecoration(
+                    color: ColorConstant.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: ClipOval(
+                    child: dataUser?.profilePicture != null
+                        ? Image.network(
+                            dataUser?.profilePicture!,
+                            fit: BoxFit.cover,
+                          )
+                        : const Icon(
+                            Icons.person_outline,
+                            size: 50,
+                            color: ColorConstant.white,
+                          ),
+                  ),
                 ),
-                child: ClipOval(
-                  child: dataUser?.profilePicture != null
-                      ? Image.network(
-                          dataUser?.profilePicture!,
-                          fit: BoxFit.cover,
-                        )
-                      : const Icon(
-                          Icons.person_outline,
-                          size: 50,
-                          color: ColorConstant.white,
-                        ),
+                const Gap(8),
+                Text(
+                  dataUser?.name ?? "User",
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: ColorConstant.black,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              const Gap(8),
-              Text(
-                dataUser?.name ?? "User",
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: ColorConstant.black,
-                  fontWeight: FontWeight.w500,
+                const Gap(2),
+                Text(
+                  dataUser?.email ?? "Email@gmail.com",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: ColorConstant.greyText,
+                  ),
                 ),
-              ),
-              const Gap(2),
-              Text(
-                dataUser?.email ?? "Email@gmail.com",
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: ColorConstant.greyText,
+                const Gap(28),
+                MenuProfileWidget(
+                  icon: Icons.person_outline,
+                  text: "About Me",
+                  onTap: () {
+                    context.pushNamed(RouteName.aboutMe);
+                  },
                 ),
-              ),
-              const Gap(28),
-              MenuProfileWidget(
-                icon: Icons.person_outline,
-                text: "About Me",
-                onTap: () {
-                  context.pushNamed(RouteName.aboutMe);
-                },
-              ),
-              const Gap(16),
-              MenuProfileWidget(
-                icon: Icons.shopping_bag_outlined,
-                text: "My Orders",
-                onTap: () {},
-              ),
-              const Gap(16),
-              MenuProfileWidget(
-                icon: Icons.favorite_outline,
-                text: "My Favorites",
-                onTap: () {},
-              ),
-              const Gap(16),
-              MenuProfileWidget(
-                icon: Icons.location_on_outlined,
-                text: "My Address",
-                onTap: () {},
-              ),
-              const Gap(46),
-              _signOutButton(ref, context),
-            ],
-          ),
-        );
-      },
-      loading: () => const Center(
-        child: CircularProgressIndicator(
-          color: ColorConstant.primary,
+                const Gap(16),
+                MenuProfileWidget(
+                  icon: Icons.shopping_bag_outlined,
+                  text: "My Orders",
+                  onTap: () {},
+                ),
+                const Gap(16),
+                MenuProfileWidget(
+                  icon: Icons.favorite_outline,
+                  text: "My Favorites",
+                  onTap: () {},
+                ),
+                const Gap(16),
+                MenuProfileWidget(
+                  icon: Icons.location_on_outlined,
+                  text: "My Address",
+                  onTap: () {},
+                ),
+                const Gap(46),
+                _signOutButton(ref, context),
+              ],
+            ),
+          );
+        },
+        loading: () => const LoadingWidget(),
+        error: (error, stackTrace) => ErrorLoadDataWidget(
+          text: error.toString(),
         ),
       ),
-      error: (error, stackTrace) => Center(
-        child: Text(
-          error.toString(),
-          style: const TextStyle(color: Colors.red),
-        ),
-      ),
-    ));
+    );
   }
 
   Widget _signOutButton(WidgetRef ref, BuildContext context) {

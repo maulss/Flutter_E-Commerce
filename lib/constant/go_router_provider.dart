@@ -62,7 +62,10 @@ Raw<GoRouter> router(RouterRef ref) {
         path: RouteName.productDetail,
         name: RouteName.productDetail,
         builder: (context, state) {
-          return const DetailProductPage();
+          final productId = state.extra as String;
+          return DetailProductPage(
+            productId: productId,
+          );
         },
       ),
       GoRoute(

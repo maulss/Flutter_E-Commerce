@@ -1,149 +1,192 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_ecommerce/constant/color_constant.dart';
+import 'package:flutter_ecommerce/providers/product/product_provider.dart';
+import 'package:flutter_ecommerce/utils/message.dart';
 import 'package:flutter_ecommerce/widget/buttom_widget.dart';
+import 'package:flutter_ecommerce/widget/error_load_data_widget.dart';
+import 'package:flutter_ecommerce/widget/loading_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class DetailProductPage extends StatelessWidget {
-  const DetailProductPage({super.key});
+class DetailProductPage extends ConsumerWidget {
+  const DetailProductPage({
+    super.key,
+    required this.productId,
+  });
+  final String productId;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final detailProductData =
+        ref.watch(getDetailProductProvider(productId: productId));
     return Scaffold(
       backgroundColor: ColorConstant.white,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 350,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: ColorConstant.white,
-                borderRadius: BorderRadius.circular(5),
+          child: detailProductData.when(
+        data: (data) {
+          final dataProduct = data.data;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 350,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: ColorConstant.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Stack(
+                  children: [
+                    Image.network(
+                      dataProduct?.imageUrl ?? "",
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 350,
+                    ),
+                    Positioned(
+                      top: 10,
+                      left: 10,
+                      child: IconButton(
+                        iconSize: 32,
+                        icon: const Icon(Icons.arrow_back_sharp),
+                        onPressed: () {
+                          context.pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: Stack(
-                children: [
-                  Image.asset(
-                    "assets/images/lime.png",
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 350,
-                  ),
-                  Positioned(
-                    top: 10,
-                    left: 10,
-                    child: IconButton(
-                      iconSize: 32,
-                      icon: const Icon(Icons.arrow_back_sharp),
-                      onPressed: () {
-                        context.pop();
-                      },
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: ColorConstant.darkGreyBackground,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
                   ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: ColorConstant.darkGreyBackground,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: Container(
-                  margin: const EdgeInsets.all(17),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "\$20.00",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: ColorConstant.darkPrimary,
-                        ),
-                      ),
-                      Text(
-                        "Organic Lime",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: ColorConstant.black,
-                        ),
-                      ),
-                      Text(
-                        "1.50 lbs",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: ColorConstant.greyText,
-                        ),
-                      ),
-                      Gap(8),
-                      Row(
-                        children: [
-                          Text(
-                            "4.5",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: ColorConstant.black,
+                  child: Container(
+                    margin: const EdgeInsets.all(17),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "\$ ${dataProduct?.price ?? 0}.00",
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: ColorConstant.darkPrimary,
+                              ),
                             ),
-                          ),
-                          Gap(6),
-                          Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                            size: 16,
-                          ),
-                        ],
-                      ),
-                      Gap(20),
-                      Text(
-                        "Organic Mountain works as a seller for many organic growers of organic lemons. Organic lemons are easy to spot in your produce aisle. They are just like regular lemons, but they will usually have a few more scars on the outside of the lemon skin. Organic lemons are considered to be the world's finest lemon for juicing",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: ColorConstant.greyText,
+                            const Spacer(),
+                            const Icon(
+                              Icons.favorite_outline,
+                            ),
+                          ],
                         ),
-                      ),
-                      Gap(20),
-                      QuantitySelector(),
-                      Spacer(),
-                      ButtonWidget(
-                        onTap: () {},
-                        text: "Add to Cart",
-                      ),
-                    ],
+                        Text(
+                          dataProduct?.name ?? "",
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: ColorConstant.black,
+                          ),
+                        ),
+                        Text(
+                          dataProduct?.stock == 0
+                              ? "Out of stock"
+                              : "Stock : ${dataProduct?.stock}",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: ColorConstant.greyText,
+                          ),
+                        ),
+                        const Gap(8),
+                        const Row(
+                          children: [
+                            Text(
+                              "4.5",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: ColorConstant.black,
+                              ),
+                            ),
+                            Gap(6),
+                            Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                              size: 16,
+                            ),
+                          ],
+                        ),
+                        const Gap(20),
+                        Text(
+                          dataProduct?.description ?? "",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: ColorConstant.greyText,
+                          ),
+                        ),
+                        const Gap(20),
+                        QuantitySelector(
+                          stock: dataProduct?.stock ?? 0,
+                        ),
+                        const Spacer(),
+                        ButtonWidget(
+                          onTap: () {},
+                          text: "Add to Cart",
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
-        ),
-      ),
+              )
+            ],
+          );
+        },
+        error: (error, stackTrace) {
+          return ErrorLoadDataWidget(
+            text: error.toString(),
+          );
+        },
+        loading: () {
+          return const LoadingWidget();
+        },
+      )),
     );
   }
 }
 
 class QuantitySelector extends StatefulWidget {
-  const QuantitySelector({super.key});
+  const QuantitySelector({
+    super.key,
+    required this.stock,
+  });
+
+  final int stock;
 
   @override
   State<QuantitySelector> createState() => _QuantitySelectorState();
 }
 
 class _QuantitySelectorState extends State<QuantitySelector> {
-  int _quantity = 1;
+  int _quantity = 0;
 
   void _increment() {
     setState(() {
-      _quantity++;
+      if (_quantity < widget.stock) {
+        _quantity++;
+      } else {
+        showError(context, "Stock is not enough");
+      }
     });
   }
 
