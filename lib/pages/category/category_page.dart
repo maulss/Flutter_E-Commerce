@@ -37,7 +37,10 @@ class CategoryPage extends ConsumerWidget {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    context.pushNamed(RouteName.detailCategory);
+                    context.pushNamed(RouteName.detailCategory, extra: {
+                      'nameCategory': dataCategory.categories?[index].name,
+                      'idCategory': dataCategory.categories?[index].categoryId,
+                    });
                   },
                   child: Container(
                     height: 120,

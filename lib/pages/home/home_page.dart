@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/constant/color_constant.dart';
 import 'package:flutter_ecommerce/providers/home/home_provider.dart';
 import 'package:flutter_ecommerce/routers/route_name.dart';
+import 'package:flutter_ecommerce/widget/card_shimmer_widget.dart';
 import 'package:flutter_ecommerce/widget/card_widget.dart';
 import 'package:flutter_ecommerce/widget/error_load_data_widget.dart';
 import 'package:flutter_ecommerce/widget/submenu_widget.dart';
@@ -199,32 +200,48 @@ class _HomePageState extends ConsumerState<HomePage> {
                         scrollDirection: Axis.horizontal,
                         itemCount: dataCategory?.categories?.length ?? 0,
                         itemBuilder: (context, index) {
-                          return Container(
-                              margin: const EdgeInsets.only(right: 10),
-                              width: 52,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  ClipOval(
-                                    child: Image.network(
-                                      dataCategory
-                                              ?.categories![index].imageUrl ??
+                          return GestureDetector(
+                            onTap: () {
+                              context.pushNamed(
+                                RouteName.detailCategory,
+                                extra: {
+                                  'nameCategory':
+                                      dataCategory?.categories![index].name ??
                                           '',
-                                      fit: BoxFit.cover,
-                                      width: 52,
-                                      height: 52,
+                                  'idCategory': dataCategory
+                                          ?.categories![index].categoryId ??
+                                      '',
+                                },
+                              );
+                            },
+                            child: Container(
+                                margin: const EdgeInsets.only(right: 10),
+                                width: 52,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ClipOval(
+                                      child: Image.network(
+                                        dataCategory
+                                                ?.categories![index].imageUrl ??
+                                            '',
+                                        fit: BoxFit.cover,
+                                        width: 52,
+                                        height: 52,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    dataCategory?.categories![index].name ?? '',
-                                    style: const TextStyle(
-                                      fontSize: 9,
-                                      color: ColorConstant.greyText,
-                                    ),
-                                  )
-                                ],
-                              ));
+                                    Text(
+                                      dataCategory?.categories![index].name ??
+                                          '',
+                                      style: const TextStyle(
+                                        fontSize: 9,
+                                        color: ColorConstant.greyText,
+                                      ),
+                                    )
+                                  ],
+                                )),
+                          );
                         },
                       ),
                     );
@@ -262,75 +279,49 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
                 const Gap(20),
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 17),
-                    child: featuredProductData.when(
-                      data: (data) {
-                        final dataProduct = data.data;
-                        return GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 20,
-                            crossAxisSpacing: 18,
-                            childAspectRatio: 0.9,
-                          ),
-                          itemCount: dataProduct?.products?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return CardWidget(
-                              imageUrl:
-                                  dataProduct?.products![index].imageUrl ?? '',
-                              price: "\$${dataProduct?.products![index].price}",
-                              title: dataProduct?.products![index].name ?? '',
-                              weight: (dataProduct?.products![index].stock ?? 0)
-                                  .toString(),
-                              onTap: () {
-                                context.pushNamed(RouteName.productDetail,
-                                    extra: dataProduct
-                                        ?.products![index].productId);
-                              },
-                            );
-                          },
-                        );
-                      },
-                      error: (error, stackTrace) {
-                        return ErrorLoadDataWidget(
-                          text: error.toString(),
-                        );
-                      },
-                      loading: () {
-                        return GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 20,
-                            crossAxisSpacing: 18,
-                            childAspectRatio: 0.9,
-                          ),
-                          itemCount: 6,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              width: double.infinity,
-                              child: Shimmer.fromColors(
-                                baseColor:
-                                    ColorConstant.greyText.withOpacity(0.1),
-                                highlightColor:
-                                    ColorConstant.greyText.withOpacity(0.8),
-                                child: Container(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ))
+                  padding: const EdgeInsets.symmetric(horizontal: 17),
+                  child: featuredProductData.when(
+                    data: (data) {
+                      final dataProduct = data.data;
+                      return GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 18,
+                          childAspectRatio: 0.9,
+                        ),
+                        itemCount: dataProduct?.products?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return CardWidget(
+                            imageUrl:
+                                dataProduct?.products![index].imageUrl ?? '',
+                            price: "\$${dataProduct?.products![index].price}",
+                            title: dataProduct?.products![index].name ?? '',
+                            weight: (dataProduct?.products![index].stock ?? 0)
+                                .toString(),
+                            onTap: () {
+                              context.pushNamed(
+                                RouteName.productDetail,
+                                extra: dataProduct?.products![index].productId,
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                    error: (error, stackTrace) {
+                      return ErrorLoadDataWidget(
+                        text: error.toString(),
+                      );
+                    },
+                    loading: () {
+                      return const CardShimmerWidget();
+                    },
+                  ),
+                )
               ],
             ),
           ),

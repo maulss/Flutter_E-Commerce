@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce/entities/category_model.dart';
 import 'package:flutter_ecommerce/pages/auth/login_page.dart';
 import 'package:flutter_ecommerce/pages/auth/register_page.dart';
 import 'package:flutter_ecommerce/pages/category/category_page.dart';
@@ -72,7 +73,13 @@ Raw<GoRouter> router(RouterRef ref) {
         path: RouteName.detailCategory,
         name: RouteName.detailCategory,
         builder: (context, state) {
-          return const DetailCategory();
+          final extra = state.extra as Map<String, dynamic>;
+          final nameCategory = extra['nameCategory'] as String;
+          final idCategory = extra['idCategory'] as String;
+          return DetailCategory(
+            idcategory: idCategory,
+            nameCategory: nameCategory,
+          );
         },
       ),
     ],
