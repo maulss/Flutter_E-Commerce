@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommerce/entities/category_model.dart';
+
 import 'package:flutter_ecommerce/pages/auth/login_page.dart';
 import 'package:flutter_ecommerce/pages/auth/register_page.dart';
 import 'package:flutter_ecommerce/pages/category/category_page.dart';
@@ -7,6 +7,7 @@ import 'package:flutter_ecommerce/pages/category/detail_category.dart';
 import 'package:flutter_ecommerce/pages/home/welcome_page.dart';
 import 'package:flutter_ecommerce/pages/product/detail_product_page.dart';
 import 'package:flutter_ecommerce/pages/profile/about_me_page.dart';
+import 'package:flutter_ecommerce/pages/serach/search_page.dart';
 import 'package:flutter_ecommerce/providers/token/token_provider.dart';
 import 'package:flutter_ecommerce/routers/route_name.dart';
 import 'package:go_router/go_router.dart';
@@ -80,6 +81,13 @@ Raw<GoRouter> router(RouterRef ref) {
             idcategory: idCategory,
             nameCategory: nameCategory,
           );
+        },
+      ),
+      GoRoute(
+        path: RouteName.search,
+        name: RouteName.search,
+        builder: (context, state) {
+          return SearchPage();
         },
       ),
     ],

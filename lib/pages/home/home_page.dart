@@ -36,50 +36,62 @@ class _HomePageState extends ConsumerState<HomePage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 17),
-                  child: SizedBox(
-                    height: 50,
-                    child: TextFormField(
-                      cursorColor: ColorConstant.greyText,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 12,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: const BorderSide(
-                            color: ColorConstant.greyText,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 50,
+                          child: TextFormField(
+                            readOnly: true,
+                            onTap: () {
+                              context.pushNamed(RouteName.search);
+                            },
+                            cursorColor: ColorConstant.greyText,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 12,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: const BorderSide(
+                                  color: ColorConstant.greyText,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: const BorderSide(
+                                  color: ColorConstant.greyText,
+                                ),
+                              ),
+                              prefixIconColor: ColorConstant.greyText,
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                size: 18,
+                              ),
+                              hintText: 'Search...',
+                              hintStyle: const TextStyle(
+                                color: ColorConstant.greyText,
+                                fontSize: 13,
+                              ),
+                              filled: true,
+                              fillColor: ColorConstant.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
                           ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: const BorderSide(
-                            color: ColorConstant.greyText,
-                          ),
-                        ),
-                        suffixIconColor: ColorConstant.greyText,
-                        prefixIconColor: ColorConstant.greyText,
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          size: 18,
-                        ),
-                        hintText: 'Search...',
-                        suffixIcon: IconButton(
-                          color: ColorConstant.greyText,
-                          onPressed: () {},
-                          icon: const Icon(Icons.filter_list, size: 18),
-                        ),
-                        hintStyle: const TextStyle(
-                          color: ColorConstant.greyText,
-                          fontSize: 13,
-                        ),
-                        filled: true,
-                        fillColor: ColorConstant.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
                         ),
                       ),
-                    ),
+                      const Gap(5),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.notifications_none,
+                          color: ColorConstant.greyText,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const Gap(15),
@@ -98,6 +110,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 height: 230,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(6),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: ColorConstant.greyText
+                                          .withOpacity(0.2),
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
                                   image: DecorationImage(
                                     image: NetworkImage(
                                         dataBanner[index].imageUrl ?? ''),
@@ -142,7 +162,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           );
                         },
                         options: CarouselOptions(
-                          autoPlayInterval: const Duration(seconds: 10),
+                          autoPlayInterval: const Duration(seconds: 20),
                           height: 230,
                           autoPlay: true,
                           viewportFraction: 1.0,
