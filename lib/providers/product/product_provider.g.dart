@@ -156,5 +156,134 @@ class _GetDetailProductProviderElement
   @override
   String get productId => (origin as GetDetailProductProvider).productId;
 }
+
+String _$searchProductHash() => r'a8ea42fb76f40e92f0c66fb39238bc4d10282b51';
+
+/// See also [searchProduct].
+@ProviderFor(searchProduct)
+const searchProductProvider = SearchProductFamily();
+
+/// See also [searchProduct].
+class SearchProductFamily extends Family<AsyncValue<ProductModel>> {
+  /// See also [searchProduct].
+  const SearchProductFamily();
+
+  /// See also [searchProduct].
+  SearchProductProvider call({
+    required String searchQuery,
+  }) {
+    return SearchProductProvider(
+      searchQuery: searchQuery,
+    );
+  }
+
+  @override
+  SearchProductProvider getProviderOverride(
+    covariant SearchProductProvider provider,
+  ) {
+    return call(
+      searchQuery: provider.searchQuery,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'searchProductProvider';
+}
+
+/// See also [searchProduct].
+class SearchProductProvider extends AutoDisposeFutureProvider<ProductModel> {
+  /// See also [searchProduct].
+  SearchProductProvider({
+    required String searchQuery,
+  }) : this._internal(
+          (ref) => searchProduct(
+            ref as SearchProductRef,
+            searchQuery: searchQuery,
+          ),
+          from: searchProductProvider,
+          name: r'searchProductProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$searchProductHash,
+          dependencies: SearchProductFamily._dependencies,
+          allTransitiveDependencies:
+              SearchProductFamily._allTransitiveDependencies,
+          searchQuery: searchQuery,
+        );
+
+  SearchProductProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.searchQuery,
+  }) : super.internal();
+
+  final String searchQuery;
+
+  @override
+  Override overrideWith(
+    FutureOr<ProductModel> Function(SearchProductRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SearchProductProvider._internal(
+        (ref) => create(ref as SearchProductRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        searchQuery: searchQuery,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<ProductModel> createElement() {
+    return _SearchProductProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SearchProductProvider && other.searchQuery == searchQuery;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, searchQuery.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SearchProductRef on AutoDisposeFutureProviderRef<ProductModel> {
+  /// The parameter `searchQuery` of this provider.
+  String get searchQuery;
+}
+
+class _SearchProductProviderElement
+    extends AutoDisposeFutureProviderElement<ProductModel>
+    with SearchProductRef {
+  _SearchProductProviderElement(super.provider);
+
+  @override
+  String get searchQuery => (origin as SearchProductProvider).searchQuery;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

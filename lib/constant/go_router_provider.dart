@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_ecommerce/pages/auth/login_page.dart';
 import 'package:flutter_ecommerce/pages/auth/register_page.dart';
+import 'package:flutter_ecommerce/pages/checkout/checkout_page.dart';
+import 'package:flutter_ecommerce/pages/order/order_page.dart';
+import 'package:flutter_ecommerce/pages/payment/payment_page.dart';
 import 'package:flutter_ecommerce/pages/category/category_page.dart';
 import 'package:flutter_ecommerce/pages/category/detail_category.dart';
 import 'package:flutter_ecommerce/pages/home/welcome_page.dart';
@@ -88,6 +91,30 @@ Raw<GoRouter> router(RouterRef ref) {
         name: RouteName.search,
         builder: (context, state) {
           return SearchPage();
+        },
+      ),
+      GoRoute(
+        path: RouteName.payment,
+        name: RouteName.payment,
+        builder: (context, state) {
+          final paymentUrl = state.extra as String;
+          return PaymentPage(
+            paymentUrl: paymentUrl,
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteName.checkout,
+        name: RouteName.checkout,
+        builder: (context, state) {
+          return CheckoutPage();
+        },
+      ),
+      GoRoute(
+        path: RouteName.orders,
+        name: RouteName.orders,
+        builder: (context, state) {
+          return OrderPage();
         },
       ),
     ],

@@ -16,7 +16,7 @@ class CardShimmerWidget extends StatelessWidget {
         crossAxisSpacing: 18,
         childAspectRatio: 0.9,
       ),
-      itemCount: 6,
+      itemCount: 15,
       itemBuilder: (context, index) {
         return Container(
           decoration: BoxDecoration(
@@ -33,6 +33,5 @@ class CardShimmerWidget extends StatelessWidget {
         );
       },
     );
-    ;
   }
 }

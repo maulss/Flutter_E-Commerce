@@ -27,6 +27,8 @@ dependencies:
   image_picker: ^1.0.8
   carousel_slider: ^5.0.0
   shimmer: ^3.0.0
+  webview_flutter: ^4.5.0
+  url_launcher: ^6.2.4
 
 dev_dependencies:
   flutter_test:

@@ -7,4 +7,7 @@ class RouteName {
   static const String productDetail = '/product-detail';
   static const String detailCategory = '/detail-category';
   static const String search = '/search';
+  static const String payment = '/payment';
+  static const String checkout = '/checkout';
+  static const String orders = '/orders';
 }

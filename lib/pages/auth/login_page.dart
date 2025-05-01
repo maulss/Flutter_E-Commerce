@@ -99,11 +99,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     : () async {
                         final email = emailController.text;
                         final password = passwordController.text;
-                        ref.read(loginLoadingProvider.notifier).state = true;
+
                         if (email.isEmpty || password.isEmpty) {
                           showError(context, "Harap isi semua bidang");
                           return;
                         }
+                        ref.read(loginLoadingProvider.notifier).state = true;
                         try {
                           final response = await ref.read(
                               loginProvider(email: email, password: password)

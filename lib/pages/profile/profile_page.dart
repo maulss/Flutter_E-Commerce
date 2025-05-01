@@ -78,7 +78,9 @@ class ProfilePage extends ConsumerWidget {
                 MenuProfileWidget(
                   icon: Icons.shopping_bag_outlined,
                   text: "My Orders",
-                  onTap: () {},
+                  onTap: () {
+                    context.pushNamed(RouteName.orders);
+                  },
                 ),
                 const Gap(16),
                 MenuProfileWidget(

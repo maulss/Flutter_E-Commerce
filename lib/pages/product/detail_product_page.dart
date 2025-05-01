@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/constant/color_constant.dart';
+import 'package:flutter_ecommerce/providers/cart/cart_provider.dart';
+import 'package:flutter_ecommerce/providers/loading/loading_provider.dart';
 import 'package:flutter_ecommerce/providers/product/product_provider.dart';
 import 'package:flutter_ecommerce/utils/message.dart';
 import 'package:flutter_ecommerce/widget/buttom_widget.dart';
@@ -8,6 +12,8 @@ import 'package:flutter_ecommerce/widget/loading_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+
+final quantityProvider = StateProvider.autoDispose<int>((ref) => 0);
 
 class DetailProductPage extends ConsumerWidget {
   const DetailProductPage({
@@ -20,6 +26,9 @@ class DetailProductPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final detailProductData =
         ref.watch(getDetailProductProvider(productId: productId));
+    final addToCartLoading = ref.watch(addToCartLoadingProvider);
+    final quantityValue = ref.watch(quantityProvider);
+
     return Scaffold(
       backgroundColor: ColorConstant.white,
       body: SafeArea(
@@ -141,8 +150,39 @@ class DetailProductPage extends ConsumerWidget {
                         ),
                         const Spacer(),
                         ButtonWidget(
-                          onTap: () {},
-                          text: "Add to Cart",
+                          onTap: addToCartLoading
+                              ? null
+                              : () async {
+                                  String productId =
+                                      dataProduct?.productId ?? "";
+                                  int quantity = quantityValue;
+                                  try {
+                                    ref
+                                        .read(addToCartLoadingProvider.notifier)
+                                        .state = true;
+                                    final response =
+                                        await ref.read(addToCartProvider(
+                                      productId: productId,
+                                      quantity: quantity,
+                                    ).future);
+                                    if (response.success == true) {
+                                      showSuccess(
+                                          context, "${response.message}");
+                                      ref
+                                          .read(quantityProvider.notifier)
+                                          .state = 0;
+                                    } else {
+                                      showError(context, "${response.message}");
+                                    }
+                                  } catch (error) {
+                                    showError(context, error.toString());
+                                  } finally {
+                                    ref
+                                        .read(addToCartLoadingProvider.notifier)
+                                        .state = false;
+                                  }
+                                },
+                          text: addToCartLoading ? "Loading..." : "Add to Cart",
                         ),
                       ],
                     ),
@@ -165,7 +205,7 @@ class DetailProductPage extends ConsumerWidget {
   }
 }
 
-class QuantitySelector extends StatefulWidget {
+class QuantitySelector extends ConsumerWidget {
   const QuantitySelector({
     super.key,
     required this.stock,
@@ -174,32 +214,23 @@ class QuantitySelector extends StatefulWidget {
   final int stock;
 
   @override
-  State<QuantitySelector> createState() => _QuantitySelectorState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final quantity = ref.watch(quantityProvider);
 
-class _QuantitySelectorState extends State<QuantitySelector> {
-  int _quantity = 0;
-
-  void _increment() {
-    setState(() {
-      if (_quantity < widget.stock) {
-        _quantity++;
+    void increment() {
+      if (quantity < stock) {
+        ref.read(quantityProvider.notifier).state++;
       } else {
         showError(context, "Stock is not enough");
       }
-    });
-  }
-
-  void _decrement() {
-    if (_quantity > 1) {
-      setState(() {
-        _quantity--;
-      });
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
+    void decrement() {
+      if (quantity > 1) {
+        ref.read(quantityProvider.notifier).state--;
+      }
+    }
+
     return Container(
       height: 50,
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -225,14 +256,14 @@ class _QuantitySelectorState extends State<QuantitySelector> {
               ),
             ),
             child: IconButton(
-              onPressed: _decrement,
+              onPressed: decrement,
               icon: const Icon(Icons.remove, color: Colors.green),
             ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              '$_quantity',
+              '$quantity',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
@@ -243,7 +274,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
               ),
             ),
             child: IconButton(
-              onPressed: _increment,
+              onPressed: increment,
               icon: const Icon(Icons.add, color: Colors.green),
             ),
           ),

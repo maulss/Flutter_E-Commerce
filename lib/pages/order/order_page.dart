@@ -1,0 +1,181 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce/constant/color_constant.dart';
+import 'package:flutter_ecommerce/providers/order/order_provider.dart';
+import 'package:flutter_ecommerce/widget/error_load_data_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
+
+class OrderPage extends ConsumerStatefulWidget {
+  const OrderPage({super.key});
+
+  @override
+  _OrderPageState createState() => _OrderPageState();
+}
+
+class _OrderPageState extends ConsumerState<OrderPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("My Orders"),
+        bottom: TabBar(
+          labelStyle: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+          controller: _tabController,
+          indicatorColor: ColorConstant.primary,
+          labelColor: ColorConstant.darkPrimary,
+          unselectedLabelColor: ColorConstant.greyText,
+          isScrollable: false,
+          tabs: const [
+            Tab(text: 'Belum Dibayar'),
+            Tab(text: 'Selesai'),
+            Tab(text: 'Dibatalkan'),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: const [
+          ListOrderWidget(status: "waiting_payment"),
+          ListOrderWidget(status: "paid"),
+          ListOrderWidget(status: "cancelled"),
+        ],
+      ),
+    );
+  }
+}
+
+class ListOrderWidget extends ConsumerWidget {
+  final String status;
+
+  const ListOrderWidget({super.key, required this.status});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final getOrderData = ref.watch(getOrderProvider(status: status));
+
+    return Padding(
+      padding: const EdgeInsets.all(17),
+      child: getOrderData.when(
+        data: (data) {
+          return ListView.separated(
+            separatorBuilder: (context, index) => const Gap(20),
+            itemCount: data.data?.length ?? 0,
+            itemBuilder: (context, index) {
+              final orderData = data.data?[index];
+              return Container(
+                padding: const EdgeInsets.all(10),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: ColorConstant.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListView.separated(
+                      separatorBuilder: (context, index) => const Gap(10),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: orderData?.orderItems?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                color: ColorConstant.greyText.withOpacity(0.2),
+                              ),
+                            ),
+                            const Gap(15),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${orderData?.orderItems![index].product?.name}",
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorConstant.black,
+                                    ),
+                                  ),
+                                  const Gap(10),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        "Product Price",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorConstant.black,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        "\$${orderData?.orderItems![index].product?.price}",
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorConstant.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Gap(10),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      "Total Price: \$${orderData?.totalPrice}",
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: ColorConstant.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+        error: (error, stackTrace) {
+          return ErrorLoadDataWidget(text: error.toString());
+        },
+        loading: () {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
+    );
+  }
+}
