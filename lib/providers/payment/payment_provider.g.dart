@@ -302,5 +302,135 @@ class _CheckPaymentStatusProviderElement
   @override
   BuildContext get context => (origin as CheckPaymentStatusProvider).context;
 }
+
+String _$getPaymentUrlHash() => r'612ae757088a4e68ea3b9d1262acd0d44e7e3dcc';
+
+/// See also [getPaymentUrl].
+@ProviderFor(getPaymentUrl)
+const getPaymentUrlProvider = GetPaymentUrlFamily();
+
+/// See also [getPaymentUrl].
+class GetPaymentUrlFamily extends Family<AsyncValue<GetPaymentUrlModel>> {
+  /// See also [getPaymentUrl].
+  const GetPaymentUrlFamily();
+
+  /// See also [getPaymentUrl].
+  GetPaymentUrlProvider call({
+    required String orderId,
+  }) {
+    return GetPaymentUrlProvider(
+      orderId: orderId,
+    );
+  }
+
+  @override
+  GetPaymentUrlProvider getProviderOverride(
+    covariant GetPaymentUrlProvider provider,
+  ) {
+    return call(
+      orderId: provider.orderId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getPaymentUrlProvider';
+}
+
+/// See also [getPaymentUrl].
+class GetPaymentUrlProvider
+    extends AutoDisposeFutureProvider<GetPaymentUrlModel> {
+  /// See also [getPaymentUrl].
+  GetPaymentUrlProvider({
+    required String orderId,
+  }) : this._internal(
+          (ref) => getPaymentUrl(
+            ref as GetPaymentUrlRef,
+            orderId: orderId,
+          ),
+          from: getPaymentUrlProvider,
+          name: r'getPaymentUrlProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getPaymentUrlHash,
+          dependencies: GetPaymentUrlFamily._dependencies,
+          allTransitiveDependencies:
+              GetPaymentUrlFamily._allTransitiveDependencies,
+          orderId: orderId,
+        );
+
+  GetPaymentUrlProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.orderId,
+  }) : super.internal();
+
+  final String orderId;
+
+  @override
+  Override overrideWith(
+    FutureOr<GetPaymentUrlModel> Function(GetPaymentUrlRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetPaymentUrlProvider._internal(
+        (ref) => create(ref as GetPaymentUrlRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        orderId: orderId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<GetPaymentUrlModel> createElement() {
+    return _GetPaymentUrlProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetPaymentUrlProvider && other.orderId == orderId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, orderId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetPaymentUrlRef on AutoDisposeFutureProviderRef<GetPaymentUrlModel> {
+  /// The parameter `orderId` of this provider.
+  String get orderId;
+}
+
+class _GetPaymentUrlProviderElement
+    extends AutoDisposeFutureProviderElement<GetPaymentUrlModel>
+    with GetPaymentUrlRef {
+  _GetPaymentUrlProviderElement(super.provider);
+
+  @override
+  String get orderId => (origin as GetPaymentUrlProvider).orderId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

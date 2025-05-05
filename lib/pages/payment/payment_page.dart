@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/providers/payment/payment_provider.dart';
+import 'package:flutter_ecommerce/widget/loading_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -83,7 +84,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
           WebViewWidget(controller: _controller),
           if (_isLoading)
             const Center(
-              child: CircularProgressIndicator(),
+              child: LoadingWidget(),
             ),
         ],
       ),

@@ -285,5 +285,21 @@ class _SearchProductProviderElement
   @override
   String get searchQuery => (origin as SearchProductProvider).searchQuery;
 }
+
+String _$getProductHash() => r'17a77a90d33458e1ed70a6fbc042b77a00e1509c';
+
+/// See also [getProduct].
+@ProviderFor(getProduct)
+final getProductProvider =
+    AutoDisposeFutureProvider<GetProductResponseModel>.internal(
+  getProduct,
+  name: r'getProductProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$getProductHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetProductRef = AutoDisposeFutureProviderRef<GetProductResponseModel>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

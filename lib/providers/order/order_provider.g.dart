@@ -168,5 +168,135 @@ class _GetOrderProviderElement
   @override
   String get status => (origin as GetOrderProvider).status;
 }
+
+String _$cancelOrderHash() => r'd0cd2dd0171d431bd7cad5208eb0ba3f03a9994b';
+
+/// See also [cancelOrder].
+@ProviderFor(cancelOrder)
+const cancelOrderProvider = CancelOrderFamily();
+
+/// See also [cancelOrder].
+class CancelOrderFamily extends Family<AsyncValue<CancelResponseModel>> {
+  /// See also [cancelOrder].
+  const CancelOrderFamily();
+
+  /// See also [cancelOrder].
+  CancelOrderProvider call({
+    required String orderId,
+  }) {
+    return CancelOrderProvider(
+      orderId: orderId,
+    );
+  }
+
+  @override
+  CancelOrderProvider getProviderOverride(
+    covariant CancelOrderProvider provider,
+  ) {
+    return call(
+      orderId: provider.orderId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'cancelOrderProvider';
+}
+
+/// See also [cancelOrder].
+class CancelOrderProvider
+    extends AutoDisposeFutureProvider<CancelResponseModel> {
+  /// See also [cancelOrder].
+  CancelOrderProvider({
+    required String orderId,
+  }) : this._internal(
+          (ref) => cancelOrder(
+            ref as CancelOrderRef,
+            orderId: orderId,
+          ),
+          from: cancelOrderProvider,
+          name: r'cancelOrderProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$cancelOrderHash,
+          dependencies: CancelOrderFamily._dependencies,
+          allTransitiveDependencies:
+              CancelOrderFamily._allTransitiveDependencies,
+          orderId: orderId,
+        );
+
+  CancelOrderProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.orderId,
+  }) : super.internal();
+
+  final String orderId;
+
+  @override
+  Override overrideWith(
+    FutureOr<CancelResponseModel> Function(CancelOrderRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: CancelOrderProvider._internal(
+        (ref) => create(ref as CancelOrderRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        orderId: orderId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<CancelResponseModel> createElement() {
+    return _CancelOrderProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CancelOrderProvider && other.orderId == orderId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, orderId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin CancelOrderRef on AutoDisposeFutureProviderRef<CancelResponseModel> {
+  /// The parameter `orderId` of this provider.
+  String get orderId;
+}
+
+class _CancelOrderProviderElement
+    extends AutoDisposeFutureProviderElement<CancelResponseModel>
+    with CancelOrderRef {
+  _CancelOrderProviderElement(super.provider);
+
+  @override
+  String get orderId => (origin as CancelOrderProvider).orderId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

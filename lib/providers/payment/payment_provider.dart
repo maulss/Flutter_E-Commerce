@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/entities/create_payment_model.dart';
+import 'package:flutter_ecommerce/entities/get_payment_url_model.dart';
 import 'package:flutter_ecommerce/providers/dio/dio_provider.dart';
 import 'package:flutter_ecommerce/routers/route_name.dart';
 import 'package:go_router/go_router.dart';
@@ -115,5 +116,23 @@ Future<void> checkPaymentStatus(
     // Debug 5: Log unexpected errors
     debugPrint('💥 Unexpected error: $e');
     rethrow;
+  }
+}
+
+@riverpod
+Future<GetPaymentUrlModel> getPaymentUrl(
+  GetPaymentUrlRef ref, {
+  required String orderId,
+}) async {
+  final dio = ref.read(dioProvider);
+  try {
+    final response = await dio.get("/payments/url/$orderId");
+    if (response.statusCode == 200) {
+      return GetPaymentUrlModel.fromJson(response.data);
+    } else {
+      throw Exception(response.data['message'] ?? "Terjadi kesalahan");
+    }
+  } on DioException catch (e) {
+    throw Exception(e.response?.data['message'] ?? "Terjadi kesalahan");
   }
 }

@@ -11,6 +11,7 @@ import 'package:flutter_ecommerce/pages/category/detail_category.dart';
 import 'package:flutter_ecommerce/pages/home/welcome_page.dart';
 import 'package:flutter_ecommerce/pages/payment/succes_payment_page.dart';
 import 'package:flutter_ecommerce/pages/product/detail_product_page.dart';
+import 'package:flutter_ecommerce/pages/product/product_page.dart';
 import 'package:flutter_ecommerce/pages/profile/about_me_page.dart';
 import 'package:flutter_ecommerce/pages/profile/profile_page.dart';
 import 'package:flutter_ecommerce/pages/serach/search_page.dart';
@@ -139,10 +140,10 @@ Raw<GoRouter> router(RouterRef ref) {
         },
       ),
       GoRoute(
-        path: RouteName.paymentFailed,
-        name: RouteName.paymentFailed,
+        path: RouteName.product,
+        name: RouteName.product,
         builder: (context, state) {
-          return const PaymentFailedPage();
+          return const ProducPage();
         },
       ),
     ],

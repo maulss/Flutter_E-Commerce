@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_ecommerce/entities/cancel_response_model.dart';
 import 'package:flutter_ecommerce/entities/create_order_model.dart';
 import 'package:flutter_ecommerce/entities/get_order_model.dart';
 import 'package:flutter_ecommerce/providers/dio/dio_provider.dart';
@@ -37,6 +38,26 @@ Future<GetOrderModel> getOrder(
       return GetOrderModel.fromJson(response.data);
     } else {
       return GetOrderModel(
+        message: response.data['message'] ?? "Terjadi kesalahan",
+      );
+    }
+  } on DioException catch (e) {
+    throw Exception(e.response?.data['message'] ?? "Terjadi kesalahan");
+  }
+}
+
+@riverpod
+Future<CancelResponseModel> cancelOrder(
+  CancelOrderRef ref, {
+  required String orderId,
+}) async {
+  final dio = ref.read(dioProvider);
+  try {
+    final response = await dio.patch("/orders/$orderId/cancel");
+    if (response.statusCode == 200) {
+      return CancelResponseModel.fromJson(response.data);
+    } else {
+      return CancelResponseModel(
         message: response.data['message'] ?? "Terjadi kesalahan",
       );
     }

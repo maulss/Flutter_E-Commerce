@@ -13,4 +13,5 @@ class RouteName {
   static const String profile = '/profile';
   static const String paymentSuccess = '/payment-success';
   static const String paymentFailed = '/payment-failed';
+  static const String product = '/product';
 }

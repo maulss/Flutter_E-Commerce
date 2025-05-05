@@ -293,8 +293,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 17),
                   child: Submenu(
-                    title: "Featured products",
-                    onTap: () {},
+                    title: "Products",
+                    onTap: () {
+                      context.pushNamed(RouteName.product);
+                    },
                   ),
                 ),
                 const Gap(20),

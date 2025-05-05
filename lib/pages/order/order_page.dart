@@ -1,12 +1,16 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/constant/color_constant.dart';
 import 'package:flutter_ecommerce/providers/order/order_provider.dart';
+import 'package:flutter_ecommerce/providers/payment/payment_provider.dart';
+import 'package:flutter_ecommerce/routers/route_name.dart';
+import 'package:flutter_ecommerce/utils/message.dart';
 import 'package:flutter_ecommerce/widget/error_load_data_widget.dart';
 import 'package:flutter_ecommerce/widget/loading_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class OrderPage extends ConsumerStatefulWidget {
   const OrderPage({super.key});
@@ -58,7 +62,7 @@ class _OrderPageState extends ConsumerState<OrderPage>
         children: const [
           ListOrderWidget(status: "waiting_payment"),
           ListOrderWidget(status: "completed"),
-          ListOrderWidget(status: "cancelled"),
+          ListOrderWidget(status: "failed"),
         ],
       ),
     );
@@ -121,7 +125,6 @@ class ListOrderWidget extends ConsumerWidget {
                                 width: 100,
                                 height: 100,
                                 fit: BoxFit.cover,
-                                color: ColorConstant.darkGreyBackground,
                               ),
                             ),
                             const Gap(15),
@@ -160,17 +163,6 @@ class ListOrderWidget extends ConsumerWidget {
                                     ],
                                   ),
                                   const Gap(10),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      "Total Price: \$${orderData?.totalPrice}",
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                        color: ColorConstant.black,
-                                      ),
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -178,6 +170,135 @@ class ListOrderWidget extends ConsumerWidget {
                         );
                       },
                     ),
+                    const Gap(10),
+                    const Divider(
+                      color: ColorConstant.greyText,
+                      thickness: 1,
+                    ),
+                    Row(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            "Total Price: \$${orderData?.totalPrice}",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: ColorConstant.black,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        orderData?.status == "waiting_payment"
+                            ? Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      try {
+                                        final response = await ref.read(
+                                            cancelOrderProvider(
+                                                    orderId:
+                                                        orderData?.orderId ??
+                                                            "")
+                                                .future);
+                                        if (response.success == true) {
+                                          showSuccess(context,
+                                              response.message.toString());
+                                          ref.invalidate(
+                                              getOrderProvider(status: status));
+                                        } else {
+                                          showError(context,
+                                              response.message.toString());
+                                        }
+                                      } catch (e) {
+                                        showError(context, e.toString());
+                                      }
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        color: ColorConstant.error,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          "Cancel",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: ColorConstant.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const Gap(5),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      try {
+                                        final response = await ref.read(
+                                            getPaymentUrlProvider(
+                                                    orderId:
+                                                        orderData?.orderId ??
+                                                            "")
+                                                .future);
+                                        if (response.success == true) {
+                                          context.pushNamed(RouteName.payment,
+                                              extra: {
+                                                "url":
+                                                    response.data?.paymentUrl,
+                                                "orderId":
+                                                    response.data?.orderId,
+                                              });
+                                        } else {
+                                          showError(context,
+                                              response.message.toString());
+                                        }
+                                      } catch (e) {
+                                        showError(context, e.toString());
+                                      }
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        color: ColorConstant.darkPrimary,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          "Bayar",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: ColorConstant.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                            : orderData?.status == "completed"
+                                ? const Text(
+                                    "Selesai",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: ColorConstant.darkPrimary,
+                                    ),
+                                  )
+                                : const Text(
+                                    "Dibatalkan",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: ColorConstant.error,
+                                    ),
+                                  )
+                      ],
+                    )
                   ],
                 ),
               );
