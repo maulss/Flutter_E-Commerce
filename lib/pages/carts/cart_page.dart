@@ -16,6 +16,8 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CartPage extends ConsumerStatefulWidget {
+  const CartPage({super.key});
+
   @override
   ConsumerState<CartPage> createState() => _CartPageState();
 }

@@ -6,7 +6,7 @@ part of 'payment_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$createPaymentHash() => r'1904535d3dde9186ea4a5910ea0380d15fe6f96b';
+String _$createPaymentHash() => r'9191f0c8858d2d5c79d2f1187c540e45dd4cdb92';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,18 +34,16 @@ class _SystemHash {
 const createPaymentProvider = CreatePaymentFamily();
 
 /// See also [createPayment].
-class CreatePaymentFamily extends Family<AsyncValue<PaymentResponseModel>> {
+class CreatePaymentFamily extends Family<AsyncValue<CreatePaymentModel>> {
   /// See also [createPayment].
   const CreatePaymentFamily();
 
   /// See also [createPayment].
   CreatePaymentProvider call({
     required String orderId,
-    required String paymentMethod,
   }) {
     return CreatePaymentProvider(
       orderId: orderId,
-      paymentMethod: paymentMethod,
     );
   }
 
@@ -55,7 +53,6 @@ class CreatePaymentFamily extends Family<AsyncValue<PaymentResponseModel>> {
   ) {
     return call(
       orderId: provider.orderId,
-      paymentMethod: provider.paymentMethod,
     );
   }
 
@@ -76,16 +73,14 @@ class CreatePaymentFamily extends Family<AsyncValue<PaymentResponseModel>> {
 
 /// See also [createPayment].
 class CreatePaymentProvider
-    extends AutoDisposeFutureProvider<PaymentResponseModel> {
+    extends AutoDisposeFutureProvider<CreatePaymentModel> {
   /// See also [createPayment].
   CreatePaymentProvider({
     required String orderId,
-    required String paymentMethod,
   }) : this._internal(
           (ref) => createPayment(
             ref as CreatePaymentRef,
             orderId: orderId,
-            paymentMethod: paymentMethod,
           ),
           from: createPaymentProvider,
           name: r'createPaymentProvider',
@@ -97,7 +92,6 @@ class CreatePaymentProvider
           allTransitiveDependencies:
               CreatePaymentFamily._allTransitiveDependencies,
           orderId: orderId,
-          paymentMethod: paymentMethod,
         );
 
   CreatePaymentProvider._internal(
@@ -108,15 +102,13 @@ class CreatePaymentProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.orderId,
-    required this.paymentMethod,
   }) : super.internal();
 
   final String orderId;
-  final String paymentMethod;
 
   @override
   Override overrideWith(
-    FutureOr<PaymentResponseModel> Function(CreatePaymentRef provider) create,
+    FutureOr<CreatePaymentModel> Function(CreatePaymentRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -128,50 +120,187 @@ class CreatePaymentProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         orderId: orderId,
-        paymentMethod: paymentMethod,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<PaymentResponseModel> createElement() {
+  AutoDisposeFutureProviderElement<CreatePaymentModel> createElement() {
     return _CreatePaymentProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is CreatePaymentProvider &&
-        other.orderId == orderId &&
-        other.paymentMethod == paymentMethod;
+    return other is CreatePaymentProvider && other.orderId == orderId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, orderId.hashCode);
-    hash = _SystemHash.combine(hash, paymentMethod.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin CreatePaymentRef on AutoDisposeFutureProviderRef<PaymentResponseModel> {
+mixin CreatePaymentRef on AutoDisposeFutureProviderRef<CreatePaymentModel> {
   /// The parameter `orderId` of this provider.
   String get orderId;
-
-  /// The parameter `paymentMethod` of this provider.
-  String get paymentMethod;
 }
 
 class _CreatePaymentProviderElement
-    extends AutoDisposeFutureProviderElement<PaymentResponseModel>
+    extends AutoDisposeFutureProviderElement<CreatePaymentModel>
     with CreatePaymentRef {
   _CreatePaymentProviderElement(super.provider);
 
   @override
   String get orderId => (origin as CreatePaymentProvider).orderId;
+}
+
+String _$checkPaymentStatusHash() =>
+    r'80ab366e8ffa813ae8c23c54b21c2c1829699950';
+
+/// See also [checkPaymentStatus].
+@ProviderFor(checkPaymentStatus)
+const checkPaymentStatusProvider = CheckPaymentStatusFamily();
+
+/// See also [checkPaymentStatus].
+class CheckPaymentStatusFamily extends Family<AsyncValue<void>> {
+  /// See also [checkPaymentStatus].
+  const CheckPaymentStatusFamily();
+
+  /// See also [checkPaymentStatus].
+  CheckPaymentStatusProvider call({
+    required String orderId,
+    required BuildContext context,
+  }) {
+    return CheckPaymentStatusProvider(
+      orderId: orderId,
+      context: context,
+    );
+  }
+
   @override
-  String get paymentMethod => (origin as CreatePaymentProvider).paymentMethod;
+  CheckPaymentStatusProvider getProviderOverride(
+    covariant CheckPaymentStatusProvider provider,
+  ) {
+    return call(
+      orderId: provider.orderId,
+      context: provider.context,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'checkPaymentStatusProvider';
+}
+
+/// See also [checkPaymentStatus].
+class CheckPaymentStatusProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [checkPaymentStatus].
+  CheckPaymentStatusProvider({
+    required String orderId,
+    required BuildContext context,
+  }) : this._internal(
+          (ref) => checkPaymentStatus(
+            ref as CheckPaymentStatusRef,
+            orderId: orderId,
+            context: context,
+          ),
+          from: checkPaymentStatusProvider,
+          name: r'checkPaymentStatusProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$checkPaymentStatusHash,
+          dependencies: CheckPaymentStatusFamily._dependencies,
+          allTransitiveDependencies:
+              CheckPaymentStatusFamily._allTransitiveDependencies,
+          orderId: orderId,
+          context: context,
+        );
+
+  CheckPaymentStatusProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.orderId,
+    required this.context,
+  }) : super.internal();
+
+  final String orderId;
+  final BuildContext context;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(CheckPaymentStatusRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: CheckPaymentStatusProvider._internal(
+        (ref) => create(ref as CheckPaymentStatusRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        orderId: orderId,
+        context: context,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _CheckPaymentStatusProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CheckPaymentStatusProvider &&
+        other.orderId == orderId &&
+        other.context == context;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, orderId.hashCode);
+    hash = _SystemHash.combine(hash, context.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin CheckPaymentStatusRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `orderId` of this provider.
+  String get orderId;
+
+  /// The parameter `context` of this provider.
+  BuildContext get context;
+}
+
+class _CheckPaymentStatusProviderElement
+    extends AutoDisposeFutureProviderElement<void> with CheckPaymentStatusRef {
+  _CheckPaymentStatusProviderElement(super.provider);
+
+  @override
+  String get orderId => (origin as CheckPaymentStatusProvider).orderId;
+  @override
+  BuildContext get context => (origin as CheckPaymentStatusProvider).context;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

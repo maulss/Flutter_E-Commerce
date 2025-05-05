@@ -35,33 +35,33 @@ class ListOrderWidget extends StatelessWidget {
                     ),
                   ),
                   const Gap(15),
-                  Expanded(
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Product Name",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: ColorConstant.black,
                           ),
                         ),
-                        const Gap(10),
+                        Gap(10),
                         Row(
                           children: [
                             Text(
                               "Product Price",
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                                 color: ColorConstant.black,
                               ),
                             ),
-                            const Spacer(),
+                            Spacer(),
                             Text(
                               "Product Quantity",
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                                 color: ColorConstant.black,
@@ -69,12 +69,12 @@ class ListOrderWidget extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const Gap(10),
+                        Gap(10),
                         Align(
                           alignment: Alignment.centerRight,
                           child: Text(
                             "Total Price",
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: ColorConstant.black,

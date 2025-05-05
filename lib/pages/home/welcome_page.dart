@@ -21,7 +21,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
 
   final List<Widget> pages = [
     const HomePage(),
-    CartPage(),
+    const CartPage(),
     const LikePage(),
     const ProfilePage(),
   ];

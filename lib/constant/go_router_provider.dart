@@ -4,12 +4,15 @@ import 'package:flutter_ecommerce/pages/auth/login_page.dart';
 import 'package:flutter_ecommerce/pages/auth/register_page.dart';
 import 'package:flutter_ecommerce/pages/checkout/checkout_page.dart';
 import 'package:flutter_ecommerce/pages/order/order_page.dart';
+import 'package:flutter_ecommerce/pages/payment/failed_payment_page.dart';
 import 'package:flutter_ecommerce/pages/payment/payment_page.dart';
 import 'package:flutter_ecommerce/pages/category/category_page.dart';
 import 'package:flutter_ecommerce/pages/category/detail_category.dart';
 import 'package:flutter_ecommerce/pages/home/welcome_page.dart';
+import 'package:flutter_ecommerce/pages/payment/succes_payment_page.dart';
 import 'package:flutter_ecommerce/pages/product/detail_product_page.dart';
 import 'package:flutter_ecommerce/pages/profile/about_me_page.dart';
+import 'package:flutter_ecommerce/pages/profile/profile_page.dart';
 import 'package:flutter_ecommerce/pages/serach/search_page.dart';
 import 'package:flutter_ecommerce/providers/token/token_provider.dart';
 import 'package:flutter_ecommerce/routers/route_name.dart';
@@ -47,7 +50,7 @@ Raw<GoRouter> router(RouterRef ref) {
         builder: (context, state) => const RegisterPage(),
       ),
       GoRoute(
-        path: '/home',
+        path: RouteName.home,
         name: RouteName.home,
         builder: (context, state) => const WelcomePage(),
       ),
@@ -90,15 +93,19 @@ Raw<GoRouter> router(RouterRef ref) {
         path: RouteName.search,
         name: RouteName.search,
         builder: (context, state) {
-          return SearchPage();
+          return const SearchPage();
         },
       ),
       GoRoute(
         path: RouteName.payment,
         name: RouteName.payment,
         builder: (context, state) {
-          final paymentUrl = state.extra as String;
+          final extra = state.extra as Map<String, dynamic>;
+          final paymentUrl = extra['url'] as String;
+          final orderId = extra['orderId'] as String;
+
           return PaymentPage(
+            orderId: orderId,
             paymentUrl: paymentUrl,
           );
         },
@@ -107,14 +114,35 @@ Raw<GoRouter> router(RouterRef ref) {
         path: RouteName.checkout,
         name: RouteName.checkout,
         builder: (context, state) {
-          return CheckoutPage();
+          return const CheckoutPage();
         },
       ),
       GoRoute(
         path: RouteName.orders,
         name: RouteName.orders,
         builder: (context, state) {
-          return OrderPage();
+          return const OrderPage();
+        },
+      ),
+      GoRoute(
+        path: RouteName.profile,
+        name: RouteName.profile,
+        builder: (context, state) {
+          return const ProfilePage();
+        },
+      ),
+      GoRoute(
+        path: RouteName.paymentSuccess,
+        name: RouteName.paymentSuccess,
+        builder: (context, state) {
+          return const PaymentSuccessPage();
+        },
+      ),
+      GoRoute(
+        path: RouteName.paymentFailed,
+        name: RouteName.paymentFailed,
+        builder: (context, state) {
+          return const PaymentFailedPage();
         },
       ),
     ],

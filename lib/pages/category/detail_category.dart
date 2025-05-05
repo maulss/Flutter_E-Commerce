@@ -5,7 +5,7 @@ import 'package:flutter_ecommerce/routers/route_name.dart';
 import 'package:flutter_ecommerce/widget/card_shimmer_widget.dart';
 import 'package:flutter_ecommerce/widget/card_widget.dart';
 import 'package:flutter_ecommerce/widget/error_load_data_widget.dart';
-import 'package:flutter_ecommerce/widget/loading_widget.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 

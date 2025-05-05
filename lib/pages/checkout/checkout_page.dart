@@ -5,11 +5,14 @@ import 'package:flutter_ecommerce/constant/color_constant.dart';
 import 'package:flutter_ecommerce/providers/cart/cart_provider.dart';
 import 'package:flutter_ecommerce/providers/loading/loading_provider.dart';
 import 'package:flutter_ecommerce/providers/order/order_provider.dart';
+import 'package:flutter_ecommerce/providers/payment/payment_provider.dart';
+import 'package:flutter_ecommerce/routers/route_name.dart';
 import 'package:flutter_ecommerce/utils/message.dart';
 import 'package:flutter_ecommerce/widget/buttom_widget.dart';
 import 'package:flutter_ecommerce/widget/error_load_data_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:shimmer/shimmer.dart';
 
@@ -347,8 +350,26 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                                   final response = await ref
                                       .read(createOrderProvider.future);
                                   if (response.success == true) {
-                                    showSuccess(
-                                        context, response.message ?? "");
+                                    final paymentResponse = await ref.read(
+                                        createPaymentProvider(
+                                                orderId:
+                                                    response.data?.orderId ??
+                                                        "")
+                                            .future);
+                                    if (paymentResponse.success == true) {
+                                      context.pushNamed(
+                                        RouteName.payment,
+                                        extra: {
+                                          "url": paymentResponse.data
+                                              ?.paymentDetails?.redirectUrl,
+                                          "orderId":
+                                              response.data?.orderId ?? "",
+                                        },
+                                      );
+                                    } else {
+                                      showError(context,
+                                          paymentResponse.message ?? "");
+                                    }
                                   } else {
                                     showError(context, response.message ?? "");
                                   }

@@ -10,4 +10,7 @@ class RouteName {
   static const String payment = '/payment';
   static const String checkout = '/checkout';
   static const String orders = '/orders';
+  static const String profile = '/profile';
+  static const String paymentSuccess = '/payment-success';
+  static const String paymentFailed = '/payment-failed';
 }

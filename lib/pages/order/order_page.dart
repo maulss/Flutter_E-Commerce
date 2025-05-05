@@ -1,7 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/constant/color_constant.dart';
 import 'package:flutter_ecommerce/providers/order/order_provider.dart';
 import 'package:flutter_ecommerce/widget/error_load_data_widget.dart';
+import 'package:flutter_ecommerce/widget/loading_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
@@ -54,7 +57,7 @@ class _OrderPageState extends ConsumerState<OrderPage>
         controller: _tabController,
         children: const [
           ListOrderWidget(status: "waiting_payment"),
-          ListOrderWidget(status: "paid"),
+          ListOrderWidget(status: "completed"),
           ListOrderWidget(status: "cancelled"),
         ],
       ),
@@ -75,6 +78,18 @@ class ListOrderWidget extends ConsumerWidget {
       padding: const EdgeInsets.all(17),
       child: getOrderData.when(
         data: (data) {
+          if (data.data == null || data.data!.isEmpty) {
+            return const Center(
+              child: Text(
+                "No orders found",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: ColorConstant.black,
+                ),
+              ),
+            );
+          }
           return ListView.separated(
             separatorBuilder: (context, index) => const Gap(20),
             itemCount: data.data?.length ?? 0,
@@ -101,10 +116,12 @@ class ListOrderWidget extends ConsumerWidget {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Container(
-                                height: 100,
+                              child: Image.network(
+                                "${orderData?.orderItems![index].product?.imageUrl}",
                                 width: 100,
-                                color: ColorConstant.greyText.withOpacity(0.2),
+                                height: 100,
+                                fit: BoxFit.cover,
+                                color: ColorConstant.darkGreyBackground,
                               ),
                             ),
                             const Gap(15),
@@ -172,7 +189,7 @@ class ListOrderWidget extends ConsumerWidget {
         },
         loading: () {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: LoadingWidget(),
           );
         },
       ),
