@@ -14,4 +14,8 @@ class RouteName {
   static const String paymentSuccess = '/payment-success';
   static const String paymentFailed = '/payment-failed';
   static const String product = '/product';
+  static const String adminPanel = '/admin-panel';
+  static const String productManajemen = '/product-manajemen';
+  static const String createProduct = '/create-product';
+  static const String editProduct = '/edit-product';
 }

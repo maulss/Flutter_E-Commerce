@@ -1,22 +1,26 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommerce/constant/color_constant.dart';
 import 'package:gap/gap.dart';
+
+import 'package:flutter_ecommerce/constant/color_constant.dart';
 
 class CardWidget extends StatelessWidget {
   const CardWidget({
-    super.key,
+    Key? key,
     required this.imageUrl,
     required this.price,
     required this.title,
     required this.weight,
     this.onTap,
-  });
+    this.isEdit = false,
+  }) : super(key: key);
 
   final String imageUrl;
   final String price;
   final String title;
   final String weight;
   final void Function()? onTap;
+  final bool? isEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -73,17 +77,19 @@ class CardWidget extends StatelessWidget {
               color: ColorConstant.greyText.withOpacity(0.5),
               thickness: 1,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.shopping_cart_outlined,
+                  isEdit == true
+                      ? Icons.edit_outlined
+                      : Icons.add_shopping_cart_outlined,
                   color: ColorConstant.darkPrimary,
                 ),
-                Gap(10),
+                const Gap(10),
                 Text(
-                  "Add to cart",
-                  style: TextStyle(
+                  isEdit == true ? "Edit" : "Add to Cart",
+                  style: const TextStyle(
                       fontSize: 12,
                       color: ColorConstant.black,
                       fontWeight: FontWeight.bold),

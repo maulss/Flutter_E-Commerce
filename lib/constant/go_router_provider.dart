@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_ecommerce/pages/admin/product/create_product_page.dart';
+import 'package:flutter_ecommerce/pages/admin/product/edit_product_page.dart';
+import 'package:flutter_ecommerce/pages/admin/product/product_management_page.dart';
 import 'package:flutter_ecommerce/pages/auth/login_page.dart';
 import 'package:flutter_ecommerce/pages/auth/register_page.dart';
 import 'package:flutter_ecommerce/pages/checkout/checkout_page.dart';
 import 'package:flutter_ecommerce/pages/order/order_page.dart';
-import 'package:flutter_ecommerce/pages/payment/failed_payment_page.dart';
 import 'package:flutter_ecommerce/pages/payment/payment_page.dart';
 import 'package:flutter_ecommerce/pages/category/category_page.dart';
 import 'package:flutter_ecommerce/pages/category/detail_category.dart';
@@ -144,6 +145,30 @@ Raw<GoRouter> router(RouterRef ref) {
         name: RouteName.product,
         builder: (context, state) {
           return const ProducPage();
+        },
+      ),
+      GoRoute(
+        path: RouteName.productManajemen,
+        name: RouteName.productManajemen,
+        builder: (context, state) {
+          return const ProductManajemenPage();
+        },
+      ),
+      GoRoute(
+        path: RouteName.createProduct,
+        name: RouteName.createProduct,
+        builder: (context, state) {
+          return const CreateProductPage();
+        },
+      ),
+      GoRoute(
+        path: RouteName.editProduct,
+        name: RouteName.editProduct,
+        builder: (context, state) {
+          final productId = state.extra as String;
+          return EditProductPage(
+            productId: productId,
+          );
         },
       ),
     ],

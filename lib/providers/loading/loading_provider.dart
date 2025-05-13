@@ -14,3 +14,7 @@ final removeFromCartLoadingProvider = StateProvider<bool>((ref) => false);
 
 //order
 final createOrderLoadingProvider = StateProvider<bool>((ref) => false);
+
+// PRODUCT
+final createProductLoadingProvider = StateProvider<bool>((ref) => false);
+final updateProductLoadingProvider = StateProvider<bool>((ref) => false);
