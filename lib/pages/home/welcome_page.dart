@@ -32,7 +32,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
         final List<Widget> pages = [
           const HomePage(),
           const CartPage(),
-          const LikePage(),
+          // const LikePage(),
           userRole.toLowerCase() == 'admin'
               ? const AdminPanelPage()
               : const ProfilePage(),
@@ -44,7 +44,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               const Icon(Icons.home_outlined, color: ColorConstant.white),
               const Icon(Icons.shopping_bag_outlined,
                   color: ColorConstant.white),
-              const Icon(Icons.favorite_outline, color: ColorConstant.white),
+              // const Icon(Icons.favorite_outline, color: ColorConstant.white),
               userRole.toLowerCase() == 'admin'
                   ? const Icon(Icons.settings_outlined,
                       color: ColorConstant.white)
@@ -55,7 +55,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               const Icon(Icons.home_outlined, color: ColorConstant.greyText),
               const Icon(Icons.shopping_bag_outlined,
                   color: ColorConstant.greyText),
-              const Icon(Icons.favorite_outline, color: ColorConstant.greyText),
+              // const Icon(Icons.favorite_outline, color: ColorConstant.greyText),
               userRole.toLowerCase() == 'admin'
                   ? const Icon(Icons.settings_outlined,
                       color: ColorConstant.greyText)

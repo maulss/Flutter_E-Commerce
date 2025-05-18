@@ -18,4 +18,8 @@ class RouteName {
   static const String productManajemen = '/product-manajemen';
   static const String createProduct = '/create-product';
   static const String editProduct = '/edit-product';
+  static const String categoryManajemen = '/category-manajemen';
+  static const String createCategory = '/create-category';
+  static const String updateCategory = '/update-category';
+  static const String detailOrder = '/detail-order';
 }

@@ -49,7 +49,7 @@ class DetailProductPage extends ConsumerWidget {
                   children: [
                     Image.network(
                       dataProduct?.imageUrl ?? "",
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                       width: double.infinity,
                       height: 350,
                     ),
@@ -168,6 +168,7 @@ class DetailProductPage extends ConsumerWidget {
                                     if (response.success == true) {
                                       showSuccess(
                                           context, "${response.message}");
+                                      ref.refresh(getCartProvider);
                                       ref
                                           .read(quantityProvider.notifier)
                                           .state = 0;

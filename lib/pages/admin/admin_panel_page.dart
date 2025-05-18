@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_ecommerce/widget/menu_profile_widget.dart';
 
 class AdminPanelPage extends ConsumerWidget {
   const AdminPanelPage({super.key});
@@ -22,25 +23,32 @@ class AdminPanelPage extends ConsumerWidget {
       ),
       body: SafeArea(
           child: Padding(
-        padding: const EdgeInsets.all(17),
+        padding: const EdgeInsets.only(top: 17, bottom: 17),
         child: Column(
           children: [
-            ContainerContent(
-              title: "Products",
+            MenuProfileWidget(
+              text: "Products",
+              icon: Icons.shopping_bag_outlined,
               onTap: () {
                 context.pushNamed(RouteName.productManajemen);
               },
             ),
             const Gap(20),
-            ContainerContent(
-              title: "Category",
-              onTap: () {},
+            MenuProfileWidget(
+              text: "Categories",
+              icon: Icons.category_outlined,
+              onTap: () {
+                context.pushNamed(RouteName.categoryManajemen);
+              },
             ),
-            const Gap(20),
-            ContainerContent(
-              title: "Banners",
-              onTap: () {},
-            ),
+            // const Gap(20),
+            // MenuProfileWidget(
+            //   text: "Banners",
+            //   icon: Icons.flag_outlined,
+            //   onTap: () {
+            //     context.pushNamed(RouteName.productManajemen);
+            //   },
+            // ),
             const Gap(46),
             _signOutButton(ref, context),
           ],

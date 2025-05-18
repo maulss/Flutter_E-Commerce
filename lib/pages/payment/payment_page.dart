@@ -68,7 +68,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
         context: context,
       ).future);
     } catch (e) {
-      // Handle error jika diperlukan
+      debugPrint('Error checking payment status: $e');
     }
   }
 
@@ -76,7 +76,13 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: null,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        ),
         title: const Text('Pembayaran'),
       ),
       body: Stack(

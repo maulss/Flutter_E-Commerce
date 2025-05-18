@@ -18,3 +18,7 @@ final createOrderLoadingProvider = StateProvider<bool>((ref) => false);
 // PRODUCT
 final createProductLoadingProvider = StateProvider<bool>((ref) => false);
 final updateProductLoadingProvider = StateProvider<bool>((ref) => false);
+
+// Category
+final createCategoryLoadingProvider = StateProvider<bool>((ref) => false);
+final updateCategoryLoadingProvider = StateProvider<bool>((ref) => false);

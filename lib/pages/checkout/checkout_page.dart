@@ -149,7 +149,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                                                 .withOpacity(0.2),
                                             child: Image.network(
                                               "${productData[index].product?.imageUrl}",
-                                              fit: BoxFit.cover,
+                                              fit: BoxFit.fill,
                                             ),
                                           ),
                                         ),
@@ -166,7 +166,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                                                     "",
                                                 style: const TextStyle(
                                                   fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
+                                                  fontWeight: FontWeight.w600,
                                                   color: ColorConstant.black,
                                                 ),
                                               ),
@@ -366,6 +366,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                                               response.data?.orderId ?? "",
                                         },
                                       );
+                                      ref.refresh(getCartProvider);
                                     } else {
                                       showError(context,
                                           paymentResponse.message ?? "");

@@ -9,15 +9,16 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
-class CategoryPage extends ConsumerWidget {
-  const CategoryPage({super.key});
+class CategoryManagementPage extends ConsumerWidget {
+  const CategoryManagementPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categoryData = ref.watch(getCategoryProvider);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Categories"),
+        title: const Text("Categories Management"),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(17),
@@ -37,10 +38,8 @@ class CategoryPage extends ConsumerWidget {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    context.pushNamed(RouteName.detailCategory, extra: {
-                      'nameCategory': dataCategory.categories?[index].name,
-                      'idCategory': dataCategory.categories?[index].categoryId,
-                    });
+                    context.pushNamed(RouteName.updateCategory,
+                        extra: dataCategory.categories?[index].categoryId);
                   },
                   child: Container(
                     height: 120,
@@ -117,6 +116,13 @@ class CategoryPage extends ConsumerWidget {
             );
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: ColorConstant.darkPrimary,
+        onPressed: () {
+          context.pushNamed(RouteName.createCategory);
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

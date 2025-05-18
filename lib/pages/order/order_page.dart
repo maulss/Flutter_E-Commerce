@@ -99,207 +99,223 @@ class ListOrderWidget extends ConsumerWidget {
             itemCount: data.data?.length ?? 0,
             itemBuilder: (context, index) {
               final orderData = data.data?[index];
-              return Container(
-                padding: const EdgeInsets.all(10),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: ColorConstant.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListView.separated(
-                      separatorBuilder: (context, index) => const Gap(10),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: orderData?.orderItems?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                "${orderData?.orderItems![index].product?.imageUrl}",
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
+              return GestureDetector(
+                onTap: () {
+                  context.pushNamed(RouteName.detailOrder,
+                      extra: orderData?.orderId);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: ColorConstant.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListView.separated(
+                        separatorBuilder: (context, index) => const Gap(10),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: orderData?.orderItems?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  "${orderData?.orderItems![index].product?.imageUrl}",
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.fill,
+                                ),
                               ),
-                            ),
-                            const Gap(15),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${orderData?.orderItems![index].product?.name}",
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: ColorConstant.black,
+                              const Gap(15),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${orderData?.orderItems![index].product?.name}",
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: ColorConstant.black,
+                                      ),
                                     ),
-                                  ),
-                                  const Gap(10),
-                                  Row(
-                                    children: [
-                                      const Text(
-                                        "Product Price",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: ColorConstant.black,
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        "\$${orderData?.orderItems![index].product?.price}",
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: ColorConstant.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Gap(10),
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                    const Gap(10),
-                    const Divider(
-                      color: ColorConstant.greyText,
-                      thickness: 1,
-                    ),
-                    Row(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            "Total Price: \$${orderData?.totalPrice}",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: ColorConstant.black,
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
-                        orderData?.status == "waiting_payment"
-                            ? Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      try {
-                                        final response = await ref.read(
-                                            cancelOrderProvider(
-                                                    orderId:
-                                                        orderData?.orderId ??
-                                                            "")
-                                                .future);
-                                        if (response.success == true) {
-                                          showSuccess(context,
-                                              response.message.toString());
-                                          ref.invalidate(
-                                              getOrderProvider(status: status));
-                                        } else {
-                                          showError(context,
-                                              response.message.toString());
-                                        }
-                                      } catch (e) {
-                                        showError(context, e.toString());
-                                      }
-                                    },
-                                    child: Container(
-                                      height: 40,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        color: ColorConstant.error,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          "Cancel",
+                                    const Gap(10),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Price:",
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
-                                            color: ColorConstant.white,
+                                            color: Colors.grey[600],
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  const Gap(5),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      try {
-                                        final response = await ref.read(
-                                            getPaymentUrlProvider(
-                                                    orderId:
-                                                        orderData?.orderId ??
-                                                            "")
-                                                .future);
-                                        if (response.success == true) {
-                                          context.pushNamed(RouteName.payment,
-                                              extra: {
-                                                "url":
-                                                    response.data?.paymentUrl,
-                                                "orderId":
-                                                    response.data?.orderId,
-                                              });
-                                        } else {
-                                          showError(context,
-                                              response.message.toString());
-                                        }
-                                      } catch (e) {
-                                        showError(context, e.toString());
-                                      }
-                                    },
-                                    child: Container(
-                                      height: 40,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        color: ColorConstant.darkPrimary,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          "Bayar",
-                                          style: TextStyle(
+                                        const Spacer(),
+                                        Text(
+                                          "\$${orderData?.orderItems![index].product?.price}",
+                                          style: const TextStyle(
                                             fontSize: 14,
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: FontWeight.bold,
                                             color: ColorConstant.black,
                                           ),
                                         ),
+                                      ],
+                                    ),
+                                    const Gap(10),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      const Gap(10),
+                      const Divider(
+                        color: ColorConstant.greyText,
+                        thickness: 1,
+                      ),
+                      Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "Total Price: \$${orderData?.totalPrice}",
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: ColorConstant.black,
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          orderData?.status == "waiting_payment"
+                              ? Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        try {
+                                          final response = await ref.read(
+                                              cancelOrderProvider(
+                                                      orderId:
+                                                          orderData?.orderId ??
+                                                              "")
+                                                  .future);
+                                          if (response.success == true) {
+                                            showSuccess(context,
+                                                response.message.toString());
+                                            ref.invalidate(getOrderProvider(
+                                                status: status));
+                                          } else {
+                                            showError(context,
+                                                response.message.toString());
+                                          }
+                                        } catch (e) {
+                                          showError(context, e.toString());
+                                        }
+                                      },
+                                      child: Container(
+                                        height: 40,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                          color: ColorConstant.error,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            "Cancel",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorConstant.white,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  )
-                                ],
-                              )
-                            : orderData?.status == "completed"
-                                ? const Text(
-                                    "Selesai",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: ColorConstant.darkPrimary,
-                                    ),
-                                  )
-                                : const Text(
-                                    "Dibatalkan",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: ColorConstant.error,
-                                    ),
-                                  )
-                      ],
-                    )
-                  ],
+                                    const Gap(5),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        try {
+                                          final response = await ref.read(
+                                              getPaymentUrlProvider(
+                                                      orderId:
+                                                          orderData?.orderId ??
+                                                              "")
+                                                  .future);
+                                          if (response.success == true) {
+                                            context.pushNamed(RouteName.payment,
+                                                extra: {
+                                                  "url":
+                                                      response.data?.paymentUrl,
+                                                  "orderId":
+                                                      response.data?.orderId,
+                                                });
+                                          } else {
+                                            showError(context,
+                                                response.message.toString());
+                                          }
+                                        } catch (e) {
+                                          showError(context, e.toString());
+                                        }
+                                      },
+                                      child: Container(
+                                        height: 40,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                          color: ColorConstant.darkPrimary,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            "Bayar",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorConstant.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : orderData?.status == "completed"
+                                  ? const Text(
+                                      "Selesai",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: ColorConstant.darkPrimary,
+                                      ),
+                                    )
+                                  : const Text(
+                                      "Dibatalkan",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: ColorConstant.error,
+                                      ),
+                                    )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               );
             },

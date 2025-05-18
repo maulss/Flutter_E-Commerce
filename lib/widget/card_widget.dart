@@ -44,7 +44,7 @@ class CardWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
               child: Image.network(
                 imageUrl,
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
                 width: double.infinity,
                 height: 85,
               ),

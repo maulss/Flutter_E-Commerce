@@ -121,7 +121,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   image: DecorationImage(
                                     image: NetworkImage(
                                         dataBanner[index].imageUrl ?? ''),
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.fill,
                                   ),
                                 ),
                               ),

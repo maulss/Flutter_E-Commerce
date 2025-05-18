@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce/pages/admin/category/category_management_page.dart';
+import 'package:flutter_ecommerce/pages/admin/category/create_category_page.dart';
+import 'package:flutter_ecommerce/pages/admin/category/edit_category_page.dart';
 import 'package:flutter_ecommerce/pages/admin/product/create_product_page.dart';
 import 'package:flutter_ecommerce/pages/admin/product/edit_product_page.dart';
 import 'package:flutter_ecommerce/pages/admin/product/product_management_page.dart';
 import 'package:flutter_ecommerce/pages/auth/login_page.dart';
 import 'package:flutter_ecommerce/pages/auth/register_page.dart';
 import 'package:flutter_ecommerce/pages/checkout/checkout_page.dart';
+import 'package:flutter_ecommerce/pages/order/detail_order_page.dart';
 import 'package:flutter_ecommerce/pages/order/order_page.dart';
 import 'package:flutter_ecommerce/pages/payment/payment_page.dart';
 import 'package:flutter_ecommerce/pages/category/category_page.dart';
@@ -168,6 +172,40 @@ Raw<GoRouter> router(RouterRef ref) {
           final productId = state.extra as String;
           return EditProductPage(
             productId: productId,
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteName.categoryManajemen,
+        name: RouteName.categoryManajemen,
+        builder: (context, state) {
+          return const CategoryManagementPage();
+        },
+      ),
+      GoRoute(
+        path: RouteName.createCategory,
+        name: RouteName.createCategory,
+        builder: (context, state) {
+          return const CreateCategoryPage();
+        },
+      ),
+      GoRoute(
+        path: RouteName.updateCategory,
+        name: RouteName.updateCategory,
+        builder: (context, state) {
+          final categoryId = state.extra as String;
+          return EditCategoryPage(
+            categoryId: categoryId,
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteName.detailOrder,
+        name: RouteName.detailOrder,
+        builder: (context, state) {
+          final orderId = state.extra as String;
+          return DetailOrderPage(
+            orderId: orderId,
           );
         },
       ),

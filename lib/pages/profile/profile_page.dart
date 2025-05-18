@@ -82,12 +82,14 @@ class ProfilePage extends ConsumerWidget {
                     context.pushNamed(RouteName.orders);
                   },
                 ),
-                const Gap(16),
-                MenuProfileWidget(
-                  icon: Icons.favorite_outline,
-                  text: "My Favorites",
-                  onTap: () {},
-                ),
+                // const Gap(16),
+                // MenuProfileWidget(
+                //   icon: Icons.favorite_outline,
+                //   text: "My Favorites",
+                //   onTap: () {
+                //     context.pushNamed(RouteName.paymentSuccess);
+                //   },
+                // ),
                 const Gap(16),
                 MenuProfileWidget(
                   icon: Icons.location_on_outlined,

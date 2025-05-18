@@ -201,18 +201,21 @@ class _EditProductPageState extends ConsumerState<EditProductPage> {
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: Image.file(_imageFile!,
-                                        fit: BoxFit.cover),
+                                        fit: BoxFit.fill),
                                   )
                                 : product?.imageUrl != null
                                     ? ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.network(product!.imageUrl!,
-                                            fit: BoxFit.cover),
+                                            fit: BoxFit.fill),
                                       )
                                     : const Center(
-                                        child: Text("Product Image",
-                                            style: TextStyle(
-                                                color: ColorConstant.black))),
+                                        child: Text(
+                                          "Product Image",
+                                          style: TextStyle(
+                                              color: ColorConstant.black),
+                                        ),
+                                      ),
                           ),
                         ),
                         const Gap(20),
@@ -259,6 +262,14 @@ class _EditProductPageState extends ConsumerState<EditProductPage> {
                               ? "Loading..."
                               : "Update Product",
                           onTap: () async {
+                            if (_nameController.text.isEmpty ||
+                                _descriptionController.text.isEmpty ||
+                                _priceController.text.isEmpty ||
+                                _stockController.text.isEmpty ||
+                                selectedCategoryId == null) {
+                              showError(context, "Please fill all fields");
+                              return;
+                            }
                             try {
                               ref
                                   .read(updateProductLoadingProvider.notifier)
