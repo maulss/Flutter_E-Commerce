@@ -13,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-final quantityProvider = StateProvider.autoDispose<int>((ref) => 0);
+final quantityProvider = StateProvider.autoDispose<int>((ref) => 1);
 
 class DetailProductPage extends ConsumerWidget {
   const DetailProductPage({
@@ -21,6 +21,13 @@ class DetailProductPage extends ConsumerWidget {
     required this.productId,
   });
   final String productId;
+
+  String _formatRupiah(int number) {
+    return 'Rp ${number.toString().replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]}.',
+        )}';
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -85,7 +92,7 @@ class DetailProductPage extends ConsumerWidget {
                         Row(
                           children: [
                             Text(
-                              "\$ ${dataProduct?.price ?? 0}.00",
+                              _formatRupiah(dataProduct?.price ?? 0),
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -171,7 +178,7 @@ class DetailProductPage extends ConsumerWidget {
                                       ref.refresh(getCartProvider);
                                       ref
                                           .read(quantityProvider.notifier)
-                                          .state = 0;
+                                          .state = 1;
                                     } else {
                                       showError(context, "${response.message}");
                                     }

@@ -74,6 +74,13 @@ class ListOrderWidget extends ConsumerWidget {
 
   const ListOrderWidget({super.key, required this.status});
 
+  String _formatRupiah(int number) {
+    return 'Rp ${number.toString().replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]}.',
+        )}';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final getOrderData = ref.watch(getOrderProvider(status: status));
@@ -129,15 +136,19 @@ class ListOrderWidget extends ConsumerWidget {
                         itemCount: orderData?.orderItems?.length ?? 0,
                         itemBuilder: (context, index) {
                           return Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  "${orderData?.orderItems![index].product?.imageUrl}",
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.fill,
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    "${orderData?.orderItems![index].product?.imageUrl}",
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
                               ),
                               const Gap(15),
@@ -153,11 +164,11 @@ class ListOrderWidget extends ConsumerWidget {
                                         color: ColorConstant.black,
                                       ),
                                     ),
-                                    const Gap(10),
+                                    const Gap(8),
                                     Row(
                                       children: [
                                         Text(
-                                          "Price:",
+                                          "Harga:",
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -166,7 +177,11 @@ class ListOrderWidget extends ConsumerWidget {
                                         ),
                                         const Spacer(),
                                         Text(
-                                          "\$${orderData?.orderItems![index].product?.price}",
+                                          _formatRupiah(orderData
+                                                  ?.orderItems![index]
+                                                  .product
+                                                  ?.price ??
+                                              0),
                                           style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
@@ -175,7 +190,30 @@ class ListOrderWidget extends ConsumerWidget {
                                         ),
                                       ],
                                     ),
-                                    const Gap(10),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Kuantitas:",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey[600],
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        Text(
+                                          orderData?.orderItems![index].quantity
+                                                  .toString() ??
+                                              "0",
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: ColorConstant.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Gap(8),
                                   ],
                                 ),
                               ),
@@ -186,134 +224,122 @@ class ListOrderWidget extends ConsumerWidget {
                       const Gap(10),
                       const Divider(
                         color: ColorConstant.greyText,
-                        thickness: 1,
+                        thickness: 2,
                       ),
-                      Row(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              "Total Price: \$${orderData?.totalPrice}",
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: ColorConstant.black,
-                              ),
-                            ),
-                          ),
-                          const Spacer(),
-                          orderData?.status == "waiting_payment"
-                              ? Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () async {
-                                        try {
-                                          final response = await ref.read(
-                                              cancelOrderProvider(
-                                                      orderId:
-                                                          orderData?.orderId ??
-                                                              "")
-                                                  .future);
-                                          if (response.success == true) {
-                                            showSuccess(context,
-                                                response.message.toString());
-                                            ref.invalidate(getOrderProvider(
-                                                status: status));
-                                          } else {
-                                            showError(context,
-                                                response.message.toString());
-                                          }
-                                        } catch (e) {
-                                          showError(context, e.toString());
-                                        }
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                          color: ColorConstant.error,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            "Cancel",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                              color: ColorConstant.white,
-                                            ),
-                                          ),
+                      const Gap(10),
+                      Text(
+                        "Total Pembayaran: ${_formatRupiah(orderData?.totalPrice ?? 0)}",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: ColorConstant.black,
+                        ),
+                      ),
+                      const Gap(10),
+                      orderData?.status == "waiting_payment"
+                          ? Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    try {
+                                      final response = await ref.read(
+                                          cancelOrderProvider(
+                                                  orderId:
+                                                      orderData?.orderId ?? "")
+                                              .future);
+                                      if (response.success == true) {
+                                        showSuccess(context,
+                                            response.message.toString());
+                                        ref.invalidate(
+                                            getOrderProvider(status: status));
+                                      } else {
+                                        showError(context,
+                                            response.message.toString());
+                                      }
+                                    } catch (e) {
+                                      showError(context, e.toString());
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: ColorConstant.error,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        "Cancel",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorConstant.white,
                                         ),
                                       ),
                                     ),
-                                    const Gap(5),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        try {
-                                          final response = await ref.read(
-                                              getPaymentUrlProvider(
-                                                      orderId:
-                                                          orderData?.orderId ??
-                                                              "")
-                                                  .future);
-                                          if (response.success == true) {
-                                            context.pushNamed(RouteName.payment,
-                                                extra: {
-                                                  "url":
-                                                      response.data?.paymentUrl,
-                                                  "orderId":
-                                                      response.data?.orderId,
-                                                });
-                                          } else {
-                                            showError(context,
-                                                response.message.toString());
-                                          }
-                                        } catch (e) {
-                                          showError(context, e.toString());
-                                        }
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                          color: ColorConstant.darkPrimary,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            "Bayar",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                              color: ColorConstant.black,
-                                            ),
-                                          ),
+                                  ),
+                                ),
+                                const Gap(10),
+                                GestureDetector(
+                                  onTap: () async {
+                                    try {
+                                      final response = await ref.read(
+                                          getPaymentUrlProvider(
+                                                  orderId:
+                                                      orderData?.orderId ?? "")
+                                              .future);
+                                      if (response.success == true) {
+                                        context.pushNamed(RouteName.payment,
+                                            extra: {
+                                              "url": response.data?.paymentUrl,
+                                              "orderId": response.data?.orderId,
+                                            });
+                                      } else {
+                                        showError(context,
+                                            response.message.toString());
+                                      }
+                                    } catch (e) {
+                                      showError(context, e.toString());
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: ColorConstant.darkPrimary,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        "Bayar",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorConstant.black,
                                         ),
                                       ),
-                                    )
-                                  ],
+                                    ),
+                                  ),
                                 )
-                              : orderData?.status == "completed"
-                                  ? const Text(
-                                      "Selesai",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: ColorConstant.darkPrimary,
-                                      ),
-                                    )
-                                  : const Text(
-                                      "Dibatalkan",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: ColorConstant.error,
-                                      ),
-                                    )
-                        ],
-                      )
+                              ],
+                            )
+                          : orderData?.status == "completed"
+                              ? const Text(
+                                  "Selesai",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorConstant.darkPrimary,
+                                  ),
+                                )
+                              : const Text(
+                                  "Dibatalkan",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorConstant.error,
+                                  ),
+                                )
                     ],
                   ),
                 ),

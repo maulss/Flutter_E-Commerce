@@ -24,8 +24,7 @@ class ProducPage extends ConsumerWidget {
             final dataCategory = data.data;
             final length = dataCategory?.products?.length;
             return length == 0
-                ? const ErrorLoadDataWidget(
-                    text: "Oops! No products available.")
+                ? const ErrorLoadDataWidget(text: "Produk tidak tersedia.")
                 : GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -34,13 +33,13 @@ class ProducPage extends ConsumerWidget {
                       crossAxisCount: 2,
                       mainAxisSpacing: 20,
                       crossAxisSpacing: 18,
-                      childAspectRatio: 0.9,
+                      childAspectRatio: 0.8,
                     ),
                     itemCount: length,
                     itemBuilder: (context, index) {
                       return CardWidget(
                         imageUrl: dataCategory?.products?[index].imageUrl ?? "",
-                        price: "\$${dataCategory?.products?[index].price}",
+                        price: dataCategory?.products?[index].price ?? 0,
                         title: dataCategory?.products?[index].name ?? "Product",
                         weight: (dataCategory?.products![index].stock ?? 0)
                             .toString(),

@@ -23,6 +23,13 @@ class CartPage extends ConsumerStatefulWidget {
 }
 
 class _CartPageState extends ConsumerState<CartPage> {
+  String _formatRupiah(int number) {
+    return 'Rp ${number.toString().replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]}.',
+        )}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final getCartData = ref.watch(getCartProvider);
@@ -162,13 +169,16 @@ class _CartPageState extends ConsumerState<CartPage> {
                                       Text(
                                         cartData[index].product?.name ?? "",
                                         style: const TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 16,
                                           color: Colors.green,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
+                                      const Gap(2),
                                       Text(
-                                        "\$ ${cartData[index].product?.price}",
+                                        _formatRupiah(
+                                            cartData[index].product?.price ??
+                                                0),
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 13,
@@ -339,7 +349,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                           const Text("Total",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18)),
-                          Text("\$${data.data?.totalPrice}",
+                          Text(_formatRupiah(data.data?.totalPrice ?? 0),
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18)),
                         ],

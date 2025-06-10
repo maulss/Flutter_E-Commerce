@@ -125,18 +125,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                left: 16,
-                                bottom: 32,
-                                child: Text(
-                                  dataBanner[index].title ?? '',
-                                  style: const TextStyle(
-                                    color: ColorConstant.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
+                              // Positioned(
+                              //   left: 16,
+                              //   bottom: 32,
+                              //   child: Text(
+                              //     dataBanner[index].title ?? '',
+                              //     style: const TextStyle(
+                              //       color: ColorConstant.black,
+                              //       fontSize: 20,
+                              //       fontWeight: FontWeight.bold,
+                              //     ),
+                              //   ),
+                              // ),
                               Positioned(
                                 left: 16,
                                 bottom: 12,
@@ -163,7 +163,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         },
                         options: CarouselOptions(
                           autoPlayInterval: const Duration(seconds: 20),
-                          height: 230,
+                          height: 180,
                           autoPlay: true,
                           viewportFraction: 1.0,
                           onPageChanged: (index, reason) {
@@ -202,7 +202,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 17),
                   child: Submenu(
-                    title: "Categories",
+                    title: "Kategori",
                     onTap: () {
                       context.pushNamed(RouteName.category);
                     },
@@ -235,32 +235,36 @@ class _HomePageState extends ConsumerState<HomePage> {
                               );
                             },
                             child: Container(
-                                margin: const EdgeInsets.only(right: 10),
-                                width: 52,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    ClipOval(
-                                      child: Image.network(
-                                        dataCategory
-                                                ?.categories![index].imageUrl ??
-                                            '',
-                                        fit: BoxFit.cover,
-                                        width: 52,
-                                        height: 52,
-                                      ),
-                                    ),
-                                    Text(
+                              margin: const EdgeInsets.only(right: 10),
+                              width: 62,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Image.network(
+                                    dataCategory?.categories![index].imageUrl ??
+                                        '',
+                                    fit: BoxFit.fill,
+                                    width: 52,
+                                    height: 52,
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
                                       dataCategory?.categories![index].name ??
                                           '',
+                                      textAlign: TextAlign.center,
                                       style: const TextStyle(
                                         fontSize: 9,
                                         color: ColorConstant.greyText,
                                       ),
-                                    )
-                                  ],
-                                )),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -293,7 +297,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 17),
                   child: Submenu(
-                    title: "Products",
+                    title: "Produk",
                     onTap: () {
                       context.pushNamed(RouteName.product);
                     },
@@ -313,14 +317,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                           crossAxisCount: 2,
                           mainAxisSpacing: 20,
                           crossAxisSpacing: 18,
-                          childAspectRatio: 0.9,
+                          childAspectRatio: 0.8,
                         ),
                         itemCount: dataProduct?.products?.length ?? 0,
                         itemBuilder: (context, index) {
                           return CardWidget(
                             imageUrl:
                                 dataProduct?.products![index].imageUrl ?? '',
-                            price: "\$${dataProduct?.products![index].price}",
+                            price: dataProduct?.products![index].price ?? 0,
                             title: dataProduct?.products![index].name ?? '',
                             weight: (dataProduct?.products![index].stock ?? 0)
                                 .toString(),

@@ -58,13 +58,11 @@ class CategoryManagementPage extends ConsumerWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ClipOval(
-                          child: Image.network(
-                            dataCategory.categories?[index].imageUrl ?? "",
-                            fit: BoxFit.cover,
-                            width: 50,
-                            height: 50,
-                          ),
+                        Image.network(
+                          dataCategory.categories?[index].imageUrl ?? "",
+                          fit: BoxFit.cover,
+                          width: 50,
+                          height: 50,
                         ),
                         const Gap(10),
                         Text(

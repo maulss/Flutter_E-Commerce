@@ -29,36 +29,6 @@ Future<CreatePaymentModel> createPayment(
   }
 }
 
-// @riverpod
-// Future<void> checkPaymentStatus(
-//   CheckPaymentStatusRef ref, {
-//   required String orderId,
-//   required BuildContext context,
-// }) async {
-//   final dio = ref.read(dioProvider);
-//   try {
-//     final response = await dio.get('/payments/status/$orderId');
-//     if (response.statusCode == 200) {
-//       final status = response.data['status'];
-//       if (status == 'paid' || status == 'completed') {
-//         context.pushReplacementNamed(RouteName.paymentSuccess);
-//       } else if (status == 'failed') {
-//         context.pushReplacementNamed(RouteName.paymentFailed);
-//       } else {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           const SnackBar(
-//             content: Text('Menunggu konfirmasi pembayaran...'),
-//           ),
-//         );
-//       }
-//     } else {
-//       throw Exception('Terjadi kesalahan saat memeriksa status pembayaran');
-//     }
-//   } on DioException catch (e) {
-//     throw Exception(e.response?.data['message'] ?? "Terjadi kesalahan");
-//   }
-// }
-
 @riverpod
 Future<void> checkPaymentStatus(
   CheckPaymentStatusRef ref, {
@@ -68,53 +38,31 @@ Future<void> checkPaymentStatus(
   final dio = ref.read(dioProvider);
 
   try {
-    // Debug 1: Log sebelum request
-    debugPrint('🔄 Checking payment status for order: $orderId');
-
+    // 1. Cek status pembayaran
     final response = await dio.get('/payments/status/$orderId');
+    final status =
+        response.data['data']['status']?.toString().toLowerCase().trim();
 
-    // Debug 2: Log raw response
-    debugPrint('📦 Raw response: ${response.data}');
-
-    if (response.statusCode == 200) {
-      final status =
-          response.data['data']['status']?.toString().toLowerCase().trim();
-
-      // Debug 3: Log normalized status
-      debugPrint('🏷️ Normalized status: "$status"');
-
-      if (status == 'paid' || status == 'completed') {
-        debugPrint('✅ Payment success, navigating to success page');
-        if (context.mounted) {
-          context.pushReplacementNamed(RouteName.paymentSuccess);
-        }
-      } else if (status == 'failed') {
-        debugPrint('❌ Payment failed, navigating to failed page');
-        if (context.mounted) {
-          context.pushReplacementNamed(RouteName.paymentFailed);
-        }
-      } else {
-        debugPrint('⏳ Payment pending, showing snackbar');
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Menunggu konfirmasi pembayaran...'),
-            ),
-          );
-        }
+    // 2. Jika status completed, langsung navigasi
+    if (status == 'paid' || status == 'completed') {
+      if (context.mounted) {
+        context.pushReplacementNamed(RouteName.paymentSuccess);
       }
-    } else {
-      debugPrint('⚠️ Server returned status code: ${response.statusCode}');
-      throw Exception('Terjadi kesalahan saat memeriksa status pembayaran');
+    }
+    // 3. Jika status failed, navigasi ke halaman failed
+    else if (status == 'failed') {
+      if (context.mounted) {
+        context.pushReplacementNamed(RouteName.paymentFailed);
+      }
+    }
+    // 4. Jika masih pending, lempar exception
+    else {
+      throw Exception('Payment still processing');
     }
   } on DioException catch (e) {
-    // Debug 4: Log Dio errors
-    debugPrint('🔥 Dio error: ${e.message}');
-    debugPrint('💬 Response error: ${e.response?.data}');
-    throw Exception(e.response?.data['message'] ?? "Terjadi kesalahan");
+    throw Exception(
+        e.response?.data['message'] ?? "Payment verification failed");
   } catch (e) {
-    // Debug 5: Log unexpected errors
-    debugPrint('💥 Unexpected error: $e');
     rethrow;
   }
 }

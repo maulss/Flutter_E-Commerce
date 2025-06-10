@@ -158,7 +158,7 @@ class _CreatePaymentProviderElement
 }
 
 String _$checkPaymentStatusHash() =>
-    r'80ab366e8ffa813ae8c23c54b21c2c1829699950';
+    r'34a834a5fdca14b09658422650b6149e89e01ac9';
 
 /// See also [checkPaymentStatus].
 @ProviderFor(checkPaymentStatus)

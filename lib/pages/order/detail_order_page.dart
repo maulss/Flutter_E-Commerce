@@ -17,6 +17,13 @@ class DetailOrderPage extends ConsumerWidget {
   }) : super(key: key);
   final String orderId;
 
+  String _formatRupiah(int number) {
+    return 'Rp ${number.toString().replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]}.',
+        )}';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final orderDetailData = ref.watch(GetOrderDetailProvider(orderId: orderId));
@@ -122,7 +129,7 @@ class DetailOrderPage extends ConsumerWidget {
                                       Row(
                                         children: [
                                           Text(
-                                            "Price:",
+                                            "Harga:",
                                             style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.grey[600],
@@ -130,7 +137,34 @@ class DetailOrderPage extends ConsumerWidget {
                                           ),
                                           const Spacer(),
                                           Text(
-                                            "\$${dataProduct?.orderItems?[index].product?.price}",
+                                            _formatRupiah(dataProduct
+                                                    ?.orderItems?[index]
+                                                    .product
+                                                    ?.price ??
+                                                0),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: ColorConstant.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Kuantitas:",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey[600],
+                                            ),
+                                          ),
+                                          const Spacer(),
+                                          Text(
+                                            dataProduct?.orderItems?[index]
+                                                    .quantity
+                                                    .toString() ??
+                                                "0",
                                             style: const TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
@@ -191,7 +225,7 @@ class DetailOrderPage extends ConsumerWidget {
                         const Gap(8),
                         buildOrderDetail(
                           "Total Price",
-                          "\$${data.data?.totalPrice?.toStringAsFixed(2) ?? '0.00'}",
+                          _formatRupiah(data.data?.totalPrice ?? 0),
                         ),
                         const Gap(8),
                         buildCopyableDetail(
@@ -251,7 +285,9 @@ class DetailOrderPage extends ConsumerWidget {
                           const Gap(8),
                           buildOrderDetail(
                             "Amount",
-                            "\$${blockchainData?.amount ?? "-"}",
+                            _formatRupiah(
+                                int.tryParse(blockchainData?.amount ?? '0') ??
+                                    0),
                           ),
                           const Gap(8),
                           buildOrderDetail(

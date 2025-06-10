@@ -44,13 +44,13 @@ class DetailCategory extends ConsumerWidget {
                       crossAxisCount: 2,
                       mainAxisSpacing: 20,
                       crossAxisSpacing: 18,
-                      childAspectRatio: 0.9,
+                      childAspectRatio: 0.8,
                     ),
                     itemCount: length,
                     itemBuilder: (context, index) {
                       return CardWidget(
                         imageUrl: dataCategory?.products?[index].imageUrl ?? "",
-                        price: "\$${dataCategory?.products?[index].price}",
+                        price: dataCategory?.products?[index].price ?? 0,
                         title: dataCategory?.products?[index].name ?? "Product",
                         weight: (dataCategory?.products![index].stock ?? 0)
                             .toString(),

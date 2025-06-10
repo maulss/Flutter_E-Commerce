@@ -16,11 +16,18 @@ class CardWidget extends StatelessWidget {
   }) : super(key: key);
 
   final String imageUrl;
-  final String price;
+  final int price;
   final String title;
   final String weight;
   final void Function()? onTap;
   final bool? isEdit;
+
+  String _formatRupiah(int number) {
+    return 'Rp ${number.toString().replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]}.',
+        )}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,30 +53,32 @@ class CardWidget extends StatelessWidget {
                 imageUrl,
                 fit: BoxFit.fill,
                 width: double.infinity,
-                height: 85,
+                height: 100,
               ),
             ),
             const Gap(6),
             Text(
-              price,
+              title,
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: FontWeight.bold,
                 color: ColorConstant.darkPrimary,
               ),
             ),
+            const Gap(2),
             Text(
-              title,
+              _formatRupiah(price),
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 11,
                 color: ColorConstant.black,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const Gap(2),
             Text(
               weight,
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: 11,
                 color: ColorConstant.greyText,
               ),
             ),

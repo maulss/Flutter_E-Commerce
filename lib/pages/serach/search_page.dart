@@ -96,7 +96,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                         child: GridView.builder(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
+                            crossAxisCount: 3,
                             mainAxisSpacing: 20,
                             crossAxisSpacing: 18,
                             childAspectRatio: 0.9,
@@ -118,8 +118,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                 );
                               },
                               child: Container(
-                                height: 100,
-                                width: 100,
+                                height: 120,
+                                width: 120,
                                 decoration: BoxDecoration(
                                   color: ColorConstant.white,
                                   borderRadius: BorderRadius.circular(5),
@@ -135,23 +135,29 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    ClipOval(
-                                      child: Image.network(
-                                        categoryData
-                                                ?.categories?[index].imageUrl ??
-                                            "",
-                                        fit: BoxFit.cover,
-                                        width: 50,
-                                      ),
+                                    Image.network(
+                                      categoryData
+                                              ?.categories?[index].imageUrl ??
+                                          "",
+                                      fit: BoxFit.cover,
+                                      width: 50,
+                                      height: 50,
                                     ),
                                     const SizedBox(height: 10),
-                                    Text(
-                                      categoryData?.categories?[index].name ??
-                                          "",
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                        color: ColorConstant.greyText,
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4),
+                                      child: Text(
+                                        categoryData?.categories?[index].name ??
+                                            "",
+                                        textAlign: TextAlign.center,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorConstant.greyText,
+                                        ),
                                       ),
                                     ),
                                   ],

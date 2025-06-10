@@ -24,6 +24,13 @@ class CheckoutPage extends ConsumerStatefulWidget {
 }
 
 class _CheckoutPageState extends ConsumerState<CheckoutPage> {
+  String _formatRupiah(int number) {
+    return 'Rp ${number.toString().replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]}.',
+        )}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final createOrderLoading = ref.watch(createOrderLoadingProvider);
@@ -174,7 +181,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    "\$${productData[index].product?.price}",
+                                                    "${productData[index].product?.price}",
                                                     style: const TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:
@@ -264,7 +271,8 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                                                 ),
                                               ),
                                               Text(
-                                                "\$${item.totalPrice}",
+                                                _formatRupiah(
+                                                    item.totalPrice ?? 0),
                                                 style: const TextStyle(
                                                   fontSize: 14,
                                                   color: ColorConstant.black,
@@ -293,7 +301,10 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                                     ),
                                   ),
                                   Text(
-                                    "\$${productData.fold(0, (sum, item) => sum + (item.totalPrice ?? 0))}",
+                                    _formatRupiah(productData.fold(
+                                        0,
+                                        (sum, item) =>
+                                            sum + (item.totalPrice ?? 0))),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -332,7 +343,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                           const Text("Total",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18)),
-                          Text("\$${data.data?.totalPrice}",
+                          Text(_formatRupiah(data.data?.totalPrice ?? 0),
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18)),
                         ],
